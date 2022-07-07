@@ -1,0 +1,322 @@
+/* Partie ci dessous dédiée à la gestion de la scrollbar */ 
+/* width */
+ ::-webkit-scrollbar {
+    width: 10px;
+  }
+  
+  
+  ::-webkit-scrollbar-track {
+    background: #f1f1f1;
+  }
+  
+  
+  ::-webkit-scrollbar-thumb {
+    background: #888;
+  }
+  
+  
+  ::-webkit-scrollbar-thumb:hover {
+    background: #555;
+  } 
+
+body {
+    height: 100vh;
+    width: 99vw;
+    display: flex;
+    flex-direction: column;
+    background-color: #5357CA;
+    font-family:  Helvetica, sans-serif;
+    justify-content: space-between;
+}
+
+
+.topMenu {
+    position:sticky;
+    top: 0px;
+    margin-bottom: 5px;
+}
+
+.bottomMenu {
+    margin-bottom: 1px;
+    position: sticky;
+    bottom:0px;
+}
+
+
+.menu{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    padding: 5px;
+    height: 30px;
+    background-color: #4745A2;
+    text-transform: uppercase;
+}
+.main{   
+    height: 100%;
+    display: flex;
+    flex-direction: column ;
+    align-items: center;
+    justify-content: center;
+    
+    overflow-x: auto;
+    text-transform: uppercase;
+}
+.grid {
+    display: flex;
+    /*height: 100%;*/
+    align-items: center;
+    justify-content: center;
+    /* overflow-y: auto; */
+    /*border: #000000 2px solid;*/
+}  
+
+.overflowY{
+    overflow-y: auto;
+}
+
+.winOrLose{
+    margin-bottom: 5Px;
+    height: 50PX;
+    width: 50px;
+    background-image: url("../images/thinking.png" );
+    background-size: contain;
+    background-repeat: no-repeat;
+    justify-self: flex-start;
+    caret-color: transparent;
+    cursor:default;
+    /*overflow: auto;*/
+}
+.winOrLose:hover{
+    background-image: url("../images/tongue.png" );
+    animation: wiggle 2s linear infinite;
+}
+.happy{
+    background-image: url("../images/veryhappy.png" );
+}
+.angry{
+    background-image: url("../images/veryangry.png" );
+}
+.selectZone{
+    margin: 5px;
+    padding: 0.5rem;
+    border: none;
+    margin-right: 3px;
+    text-shadow: #000000 1px solid;
+}
+
+.difficulty{
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    height: 20px;
+    margin: 5px;
+    color: #ffffff;
+}
+
+.submit-btn {
+    background-color: #9B68E4; 
+}
+
+.menuBtn{
+    background-color: #9C68E4;
+    color: lightgray;
+    margin-right: 1rem;
+    border:none;
+    height: 32px;
+}
+.btn{
+    text-transform: uppercase;
+    color: white;
+    letter-spacing: 3px;
+    font-weight: bold;
+}
+.config {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;     
+}
+
+.form{
+    padding: 0.5rem;
+    border: none;
+    margin-right: 5px;
+}
+
+.pixel {
+    border: solid #858585 1px;
+    background-color: #D2DAE2;
+    text-align: center;
+    caret-color: transparent;
+    cursor:default;
+    user-select: none;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+}
+
+.pixel--mineSweeper{
+    border: 2px outset #ececec;
+    box-sizing: border-box;
+}
+
+.pixel--hide {
+    color: transparent;    
+}
+
+.pixel--revealed {
+    border: solid #808080;
+    border-width: 1px 0 0 1px;
+    background-color: #d1d1d1;
+    font-weight: bold;
+    pointer-events: none; 
+}
+
+.pixel--bomb{
+    background-color: #a09f9f;
+}
+
+.pixel--flag{
+    background-image: url("../images/redFlag.png");
+    background-size: contain;
+}
+
+.pixel--questionMark{
+    background-image: url("../images/interrogation.png");
+    background-size: contain;
+}
+
+.colorPalette {
+    background-color: #4745A2;
+    display: flex;
+}
+
+.colorBtn{ 
+    border: solid 2px #00000000;
+    border-radius: 100%;
+    height: 20px;
+    width: 20px;
+    caret-color: transparent;
+    margin: 5px;
+}
+
+.colorBtn:hover {
+    transform: scale(1.4);
+    border: solid 2px #000000;
+}
+
+.colorBtn--active {
+    border: solid 2px #ffffff;
+    transform: scale(1.2);
+}
+
+.lightgrey {
+    background-color: #D2DAE2;
+}
+
+.darkgrey {
+    background-color: #475460;
+}
+
+.orange {
+    background-color: #E3B341;
+}
+
+.green {
+    background-color: #3FB950;
+}
+.red {
+    background-color: #e34141;
+}
+.greenText {
+    color: #3FB950;
+}
+.redText {
+    color: #e34141;
+}
+.blue {
+    color: #4141e3;
+}
+.cyan {
+    color: #00b1b1;
+}
+.violet {
+    color: #f0f;
+}
+.darkRed {
+    color: #930000;
+}
+.darkGreen {
+    color: #036900;
+}
+
+.hide{
+    display: none;
+}
+
+
+/* ANIMATED BOUTON */
+.animatedBtn {
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+  }
+  
+  .animatedBtn span {
+    position: relative;
+    transition: all .35s ease-Out;
+    pointer-events: none; 
+
+  }
+  
+  .slide {
+    width: 100%;
+    height: 100%;
+    left: -200px;
+    background: #f4c4f1;
+    position: absolute;
+    transition: all .35s ease-Out;
+    bottom: 0;
+    pointer-events: none; 
+
+  }
+  
+  .animatedBtn:hover .slide {
+    left: 0;
+  }
+  
+  .animatedBtn:hover a {
+    color: #2D3142;
+  }
+
+  /* ANIMATED BOUTON  FIN*/
+
+
+/* Keyframes */
+@keyframes wiggle {
+    0%, 7% {
+      transform: rotateZ(0);
+    }
+    15% {
+      transform: rotateZ(-15deg);
+    }
+    20% {
+      transform: rotateZ(10deg);
+    }
+    25% {
+      transform: rotateZ(-10deg);
+    }
+    30% {
+      transform: rotateZ(6deg);
+    }
+    35% {
+      transform: rotateZ(-4deg);
+    }
+    40%, 100% {
+      transform: rotateZ(0);
+    }
+  }
+

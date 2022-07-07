@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+  <!--------------- HEAD ---------------->
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Invader</title>
+  <link rel="stylesheet" href="../css/reset.css">
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<!--------------- BODY ---------------->
+<body>
+  <!------- Menu bas-->
+  <div class = 'menu topMenu'>
+    <nav id="navTop">
+    </nav>
+  </div>
+    <div class = 'main'>
+      <!------- Gagné ou perdu -->
+      <div  id ="emojiWin" class = "winOrLose"></div>
+      <!------- La grille-->
+      <div id="grid" class="grid">
+      <!------- La palette de couleur en bas-->
+      </div>
+  </div>
+  <!------- Menu bas-->
+  <div class = 'menu bottomMenu'>
+          <!--------------- MineSweeper ---------------->
+          <div id="difficulty" class ="difficulty">
+            <label for="difficulty-choice">Select Difficulty :</label>
+            <select name="difficulty" id="difficulty-choice" class = "selectZone">  
+              <option value="easyDiff">Easy</option>
+              <option value="mediumDiff">Medium</option>
+              <option value="hardDiff">Hard</option>
+              <option value="customDiff">Custom</option>
+            </select>
+          </div>
+
+      <!--------------- Grid Size Config ---------------->
+      <form class = "config">
+        <input id='nbOfMines' class = 'form' type="number" placeholder="Nomber of bombs">
+        <input id='gridSize' class = 'form' type="number" placeholder="Grid size">
+        <input id="pixelSize" class = 'form' type="number" placeholder="Pixels size">
+        <button id ='configBtn' class="form btn submit-btn animatedBtn">
+          <div class="slide"></div> <span>GO</span>
+         </button>
+      </form>
+
+      <!--<button id = 'clearBtn' class = "form btn submit-btn" >Clear</button> -->
+      <button id = 'clearBtn' class = "form btn submit-btn animatedBtn" >
+        <div class="slide"></div> <span>Clear</span>
+      </button>
+      
+  </div>
+
+  <script src="../js/grid.js"></script>
+  <script src="../js/pixel.js"></script>
+  <script src="../js/invaders.js"></script>
+  <script src="../js/mineSweeper.js"></script>
+
+  <script src="../js/app.js"></script>
+  
+</body>
+</html>
