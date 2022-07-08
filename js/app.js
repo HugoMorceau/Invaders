@@ -1,3 +1,5 @@
+/* eslint-disable no-undef */
+/* eslint-disable no-constant-condition */
 
 const app = {
     firsInit: true,
@@ -122,7 +124,7 @@ const app = {
         if(app.currentMode === "mineSweeper" && mineSweeper.difficulty === 'customDiff'){
             mineSweeper.nbOfMines = document.getElementById('nbOfMines').value
         }
-        if (pixelSizeInput == '', 0 || gridSizeInput == '', 0)  {
+        if (pixelSizeInput === '', 0 || gridSizeInput === '', 0)  {
             console.log('Les tailles de grille ou pixel vide(s) ou = 0, valeur par default sélectionée');
             app.init();
         } else {
