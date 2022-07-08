@@ -5,17 +5,21 @@ const grid = {
     gridDiv: document.querySelector('#grid'),
 
     init() {
-        console.log('*** Début Initialisation grille ***') // debug
+        console.log('Début Initialisation grille') // debug
         if (this.gridSize == 0 || this.gridSize == '') {
             this.gridSize = this.defaultGridSize
         }
         this.drawGrid();
-        console.log('*** Fin Initialisation grille ***') // debug
+        console.log('Fin Initialisation grille') // debug
     },
     clearGrid() {
         document.querySelectorAll('div.column').forEach(e => e.remove());
     },
-
+    randomNum() {
+        const MIN = 0;
+        const max = this.gridSize
+        return Math.floor(Math.random() * (max - MIN)) + MIN;
+    },
     //Invaders
     drawGrid() {
         grid.clearGrid();

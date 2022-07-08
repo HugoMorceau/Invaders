@@ -73,13 +73,6 @@ const mineSweeper = {
        console.log('Reset MineSweeper done'+ this.resetCount)
     },
     initDifficultySelect(){
-        
-        
-        // const diffSelector =
-   /*      document.getElementById("difficulty-choice").value = "easyDiff"
-        mineSweeper.difficulty = 'easyDiff'
-        this.setDifficulty(); */
-        
         const selDiff = document.getElementById("difficulty-choice").value
         this.difficulty = selDiff
         document.getElementById("difficulty").classList.remove('hide')
@@ -113,8 +106,8 @@ const mineSweeper = {
             let col = 0
             let row = 0
             do{ // Generation d'un double index de tab [col][row]
-                col = mineSweeper.randomNum()
-                row = mineSweeper.randomNum()
+                col = grid.randomNum()
+                row = grid.randomNum()
             }  // Si déjà une bombe ici, on boucle pour re générer un index aleatoire
                // car on ne peut pas avoir 2 bombes sur la même case
             while(this.minesArray[col][row] === 'bomb')
@@ -126,11 +119,7 @@ const mineSweeper = {
         }
         this.setNbMinesAround();
     },
-    randomNum() {
-        const MIN = 0;
-        const max = grid.gridSize
-        return Math.floor(Math.random() * (max - MIN)) + MIN;
-    },
+
     setNbMinesAround(){
         // boucle sur le tableau des pixels
         for (let i = 0; i < grid.gridSize; i++) {

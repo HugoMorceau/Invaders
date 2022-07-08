@@ -1,5 +1,8 @@
 /* eslint-disable no-undef */
 /* eslint-disable no-constant-condition */
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  }
 
 const app = {
     firsInit: true,
@@ -8,8 +11,18 @@ const app = {
     previousMode: '',
     bottomMenu: document.querySelector('.bottomMenu'),
     topMenu: document.querySelector('.topMenu'),
+    initCount: 0,
+    resetCount: 0,
     init(){
-        console.log('****** Debut initialisation APP ******') //debug
+        // DEBUG PURPOSE
+        console.log('**********************************************')
+        this.initCount++;
+        console.log('START INIT APP - COUNT : ' + this.initCount)
+        // DEBUG END
+        if(app.firsInit){
+            app.initModesMenu();
+            invaders.initColorPalette();
+        }
         app.reset();
         app.listenEvents();
         pixel.init();
@@ -22,31 +35,36 @@ const app = {
             case  'invaders':
                 invaders.init();
                 break;
+            case  'snake':
+                snake.init();
+                break;
             default:
                 invaders.init();
         }
+
         app.firsInit = false;
-        console.log("Previous = " + app.previousMode + " - Current = " + app.currentMode) //debug
-        console.log('****** Fin initialisation APP ******') // debug
+        console.log("Previous app mode = " + app.previousMode + " - Current = " + app.currentMode) //debug
+        console.log('Fin initialisation APP') // debug
     },
     reset(){
+        // DEBUG PURPOSE
+        this.resetCount++;
+        console.log('START RESET APP - COUNT : ' + this.resetCount)
+        // DEBUG END
         switch(this.previousMode){
             case 'invaders':
                 invaders.resetInvaders();
-                /*this.previousMode = 'invaders';*/
                 break;
             case 'mineSweeper':
                 mineSweeper.resetMineSweeper();
-                /*this.previousMode = 'mineSweeper';*/ 
                 break;
-            default:
-                 if(app.firsInit == false) {
-                    console.log('Reset initial')
-                    invaders.resetInvaders();
-                 }
-                 console.log('Reset initial par defaut : ')
-                    mineSweeper.resetMineSweeper(); 
-                /*this.previousMode = 'invaders';*/
+            case 'snake':
+                snake.reset();
+                break;
+            default: 
+                invaders.resetInvaders();
+                console.log('Previous mode undefined => reset par defaut')
+                mineSweeper.resetMineSweeper(); 
         }
     },
     initModesMenu(){  
@@ -74,35 +92,26 @@ const app = {
   
     // Ajout des écouteurs communs à la page
     listenEvents(){
-
-        // A FAIRE :  Automatiser la création des ecouteurs via le tableau des modes
-        
+        // A FAIRE :  Automatiser la création des ecouteurs via le tableau des modes  
         // btn demineur
         const msBtn = document.getElementById('mineSweeperBtn');
         msBtn.addEventListener('click', app.setMode);
-
         // btn invaders
         const invadersBtn = document.getElementById('invadersBtn');
         invadersBtn.addEventListener('click', app.setMode);
-
         // btn Snake 
         const snakeBtn = document.getElementById('snakeBtn');
-        snakeBtn.addEventListener('click', app.handleSnakeMode) 
-            
+        snakeBtn.addEventListener('click', app.setMode)     
         //btn win or loose
         const winLoseBtn = document.getElementById('emojiWin')
         winLoseBtn.addEventListener('click', app.setModeBis); // Temporaire => A améliorer directement dans setMode ?
-
-    },
-    handleSnakeMode(){
-        alert('Dsl en cours de developpement...')
     },
     setMode(evt){
         // Récupération du mode à partir de l'id bouton : modeBtn
         app.previousMode = app.currentMode
         app.currentMode = evt.target.id.substring(0,evt.target.id.length-3);
     /* Debug */
-        console.log('click on ' + evt.target + ' son Identifiant Est : ' + evt.target.id)
+        console.log('Click on ' + evt.target + ' Target ID is : ' + evt.target.id)
         console.log('Current mode set to : ' + app.currentMode)
         console.log('Previous mode is: ' + app.previousMode);
     /* end Debug */
@@ -134,7 +143,5 @@ const app = {
         }
     },
 }
-app.initModesMenu();
-invaders.initColorPalette();
 app.init();
 
