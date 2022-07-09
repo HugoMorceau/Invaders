@@ -1,11 +1,10 @@
 const pixel = {
-
     defaultPixelSize: '30px',
     pixelSize: '0px',
     defaultPixelDrawColor: 'lightgrey',
     pixelDrawColor: 'lightgrey',
     pixelsArray: [],
-
+    
     init() {
         if (this.pixelSize == '0px' || this.pixelSize == 'px') {
             this.pixelSize = this.defaultPixelSize

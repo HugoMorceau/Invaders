@@ -4,19 +4,21 @@ const snake = {
     snakeSize: 0,
     snakeSpeed: 1,
     snakeColor: 'darkgrey',
-    snakeHeadPos: [0,0],
+    posHead: [0,0],
     snakeTailPos: [0,0],
     snakeBody: [],
+    direction: 'Left',
+    lastDirection : 'Left',
     difficulty: [1,2,3],
     ratPos: [0,0],
     ratColor: 'red',
-    indexPlay: -1,
+    delay: 300, 
 
     init(){
-        this.snakeSize = this.defaultSnakeSize
+        
         console.log('Init Snake start') // debug
-        //y hauteur
-        //x côté
+        this.snakeSize = this.defaultSnakeSize
+        this.listenKeyboard()
         let col = Math.round(grid.gridSize/2) 
         let row = Math.floor(grid.gridSize/2) 
         let i = 0
@@ -28,109 +30,132 @@ const snake = {
              }
             if(i=== this.snakeSize - 1){
                 // dernière itération, tête du serpent
-                this.snakeHeadPos = [col,row]         
+                this.posHead = [col,row]         
             }
-            
             col--
             i++
         }
         this.drawRat();
-        setTimeout(this.play, 100)
-        // snake.play();
+
+        setTimeout(this.play, this.delay)
         console.log('Init Snake done') // debug
     },
     reset(){
         console.log('Reset Snake done') // debug
     },
-    
-    play(){
-        snake.indexPlay++
-        
+    listenKeyboard(){
+        document.addEventListener('keydown', snake.handleKeyboard)
+    },
+    handleKeyboard(event){
+        console.log(event.code)
+        if(event.code.substring(0,5)=== 'Arrow'){
+            event.preventDefault()
+            const direction = event.code.split('Arrow')
+            snake.direction = direction[1]
+        }
+        // Gestion des autres touches
+        switch (event.code) {
+            case 'Space':
+                // Pause le jeu, a developper plus tard
+                break;
+            default: 
+                break;
+        }
+    },
+
+    play(){      
         if(snake.iamAlive){
-            let direction = snake.getDirection();
-            snake.iamAlive = snake.moveSnake(direction[snake.indexPlay])
-            setTimeout(snake.play, 100)           
+            // snake.iamAlive = snake.moveSnake(this.Direction)
+            snake.moveSnake(snake.direction)
+            setTimeout(snake.play, snake.delay)           
         }else{
             alert('you lose')
         }
     },
     moveSnake(direction){ // async 
-        // await sleep(20);
+        console.log('Position tête : ' + this.posHead)
         console.log('move snake ' + direction   )
-        let translatedDirection = this.translateDirection(direction)
+        let translatedDirection = this.translateDirection(this.direction)
         // on déplace la tête du serpent
-        snakeHead = this.snakeHeadPos
-        snakeHead[0] = snakeHead[0] + translatedDirection[0]
-        snakeHead[1] = snakeHead[1] + translatedDirection[1]
-        console.log(snakeHead)
+        let snakeHeadcol = snake.posHead[0]
+        let snakeHeadrow = snake.posHead[1]
+        snakeHeadcol = snakeHeadcol + translatedDirection[0]
+        snakeHeadrow = snakeHeadrow + translatedDirection[1]
         // analyse de la prochaine position de la tête
-        const pix = pixel.pixelsArray[snakeHead[0]][snakeHead[1]]
-        // Si on va dans le mur ou dans le serpent, on perd
-        pixIs = this.whatIsThisPix(pix)
-        if(pixIs === 'snake'){
-            console.log('dans le snake')
-            return false;
+        let pix = ''
+        try {
+            pix = pixel.pixelsArray[snakeHeadcol][snakeHeadrow]
+            // Si on va dans le mur ou dans le serpent, on perd
+            pixIs = this.whatIsThisPix(pix)
+        } catch (error) {
+            if (error instanceof TypeError){
+                console.log('error catched for Type Error')
+                pixIs = 'wall'
+                console.log('dans le mur')
+                snake.iamAlive = false
+                return
+            }
+        }
+        console.log('Position tête : ' + this.posHead)
+        if (pixIs === 'snake') {
+                // Le serpent ne peut pas recule
+                if(this.snakeBody[1] === pix){ 
+                    console.log('annule direction')
+                    // on annule la dernière direction  
+                    console.log('last dir = ' + snake.lastDirection)             
+                    snake.direction = snake.lastDirection
+                    this.moveSnake(snake.direction)
+                    return;
+                } else{
+                    console.log('dans le snake')
+                    snake.iamAlive = false
+                    return;
+                }
+        } 
+        if (pixIs === 'rat') {
+            console.log('Le snake mange le rat')
         }
         if(pixIs === 'wall'){
             console.log('dans le mur')
-            return false;
+            snake.iamAlive = false
+            return;
         }
-        // Dessine la nouvelle position 
-        this.drawSnake(snakeHead[0],snakeHead[1])
-        this.snakeHeadPos = snakeHead
 
-        // On supprime le bout de la queue du serpent
-        console.log(this.snakeBody.length)
-        this.eraseSnake(this.snakeBody.pop())
+        // Dessine la nouvelle position 
+        this.drawSnake(snakeHeadcol,snakeHeadrow)
+        this.posHead = [snakeHeadcol,snakeHeadrow]
+        if(pixIs === 'rat'){
+            // On fait pop un nouveau rat si le précédent est mangé
+            this.drawRat();
+        } else {
+            // On supprime le bout de la queue du serpent
+            this.eraseSnake(this.snakeBody.pop())
+        }
+        snake.lastDirection = snake.direction
         return true;
     },
   
     drawSnake(col,row){
-        console.log('draw snake')
+        console.log('draw snake : ')
+        
         const pix = pixel.pixelsArray[col][row]
+        console.log( pix )
         pix.classList.remove(pixel.defaultPixelDrawColor)
+        pix.classList.remove(this.ratColor)
         pix.classList.add(this.snakeColor)
         this.snakeBody.unshift(pix)
+        
     },
     eraseSnake(pix){//col,row){
         // const pix = pixel.pixelsArray[col][row]
         pix.classList.remove(this.snakeColor)
         pix.classList.add(pixel.defaultPixelDrawColor)
     },
-    getDirection(){
-         // return ['left', 'up', 'right', 'down']
-         // return ['left', 'up', 'right', 'up', 'left', 'left', 'left', 'down']
-         const areturn = ['left', 'left', 'left', 'up', 'up', 'right', 'right', 'right', 'right','right', 'right', 'down','down','down','down']
-         if (snake.indexPlay > areturn.length -1){
-            snake.indexPlay = 0
-         }     
-         return areturn 
-         
-    },
-    translateDirection(direction){
-        // direction haut bas gauche droite
-        switch (direction) {
-            case 'up':
-                return [0, -1];
 
-            case 'down':
-                return [0, +1];
-
-            case 'right':
-                return [+1, 0];
-
-            case 'left':
-                return [-1, 0];
-
-            default:
-                break;
-        }
-    },
     whatIsThisPix(pix){
         if(typeof pix === 'undefined'){
             return 'wall'
         }
-        
         if(pix.classList.contains(this.snakeColor)){
             return 'snake';
         }
@@ -144,19 +169,29 @@ const snake = {
         do{
             i++
             col = grid.randomNum()
-            row = grid.randomNum()
+            row = grid.randomNum() 
             this.ratPos = [col,row]
             ratPix = pixel.pixelsArray[col][row]
-            // Debug
-            if( i > 1000) {
-                console.log('infinite while in snake.drawRat')
-                break;
-            }
-            // Debug
          } while(this.whatIsThisPix(ratPix) != 'free')
 
         ratPix.classList.remove(ratPix.classList[1])
         ratPix.classList.add(this.ratColor)
+    },
+    translateDirection(direction){
+        // direction haut bas gauche droite
+        switch (direction) {
+            case 'Up':
+                return [0, -1];
+ 
+            case 'Down':
+                return [0, +1];
+ 
+            case 'Right':
+                return [+1, 0];
+ 
+            case 'Left':
+                return [-1, 0];
+        }
     },
 }
 

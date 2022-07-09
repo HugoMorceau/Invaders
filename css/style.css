@@ -65,12 +65,13 @@ body {
 }
 .grid {
     display: flex;
-    /*height: 100%;*/
     align-items: center;
     justify-content: center;
-    /* overflow-y: auto; */
     /*border: #000000 2px solid;*/
 }  
+.grid--border{
+    border: #000000 2px solid;
+}
 
 .overflowY{
     overflow-y: auto;
@@ -156,6 +157,10 @@ body {
     justify-content: center;
     align-items: center;
 
+}
+
+.pixel--snake{
+    border: none;
 }
 
 .pixel--mineSweeper{

@@ -1,9 +1,5 @@
 /* eslint-disable no-undef */
 /* eslint-disable no-constant-condition */
-function sleep(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
-  }
-
 const app = {
     firsInit: true,
     availablesModes: ['invaders', 'mineSweeper', 'snake'],
@@ -45,6 +41,9 @@ const app = {
         app.firsInit = false;
         console.log("Previous app mode = " + app.previousMode + " - Current = " + app.currentMode) //debug
         console.log('Fin initialisation APP') // debug
+    },
+    param(){
+
     },
     reset(){
         // DEBUG PURPOSE
