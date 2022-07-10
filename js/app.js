@@ -66,6 +66,14 @@ const app = {
                 mineSweeper.resetMineSweeper(); 
         }
     },
+    initEmojiWin(){
+        document.getElementById('emojiWin').classList.remove('hide')
+        document.getElementById('emojiWin').classList.remove('angry')
+        document.getElementById('emojiWin').classList.remove('happy')
+    },
+    resetEmojiWin(){
+        document.getElementById("emojiWin").classList.add('hide')
+    },
     initModesMenu(){  
         const navTop = document.getElementById('navTop')
         this.availablesModes.forEach(mode => {

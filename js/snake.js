@@ -21,11 +21,18 @@ const snake = {
     nextPosCol: '',
     nextPosRow: '',
     nextPositionType: '',
-    direction: 'Left',
-    lastDirection : 'Left',
+    direction: 'left',
+    lastDirection : 'left',
+    timeoutId : 0,
+    timeoutIdCallBack : 0,
+    resetRequired: false,
 
     init(){
+        this.direction = 'left'
+        this.iamAlive = true
+        this.resetRequired = false;
         console.log('Init Snake start') // debug
+        app.initEmojiWin();
         this.snakeSize = this.defaultSnakeSize
         this.listenKeyboard()
         let col = Math.round(grid.gridSize/2) 
@@ -45,18 +52,27 @@ const snake = {
             i++
         }
         this.drawRat();
+        this.timeoutId = setTimeout(this.play, this.delay)
 
-        setTimeout(this.play, this.delay)
+        console.log(this.timeoutId)
         console.log('Init Snake done') // debug
     },
     reset(){
+        this.resetRequired = true;
+        grid.init();
+        app.resetEmojiWin();
+        snake.snakeBody = []
         console.log('Reset Snake done') // debug
     },
 
     play(){      
+        if(snake.resetRequired) {
+            console.log('RESET REQUIRED PLAY 1')
+            return;
+        }
         if(snake.iamAlive){
             snake.moveSnake()
-            setTimeout(snake.play, snake.delay)           
+            this.timeoutIdCallBack = setTimeout(snake.play, snake.delay)           
         }else{
             alert('you lose')
         }
@@ -96,6 +112,10 @@ const snake = {
         pixel.pixelsArray[this.nextPosCol][this.nextPosRow]
     },
     moveSnake(){  
+        if(this.resetRequired) {
+            console.log('RESET REQUIRED MOVE SNAKE')
+            return;
+        }
         console.log('Position tête : ' + this.posHead)
         console.log('move snake ' + this.direction   )
         this.setNextPosition()
@@ -191,16 +211,16 @@ const snake = {
     translateDirection(direction){
         // direction haut bas gauche droite
         switch (direction) {
-            case 'Up':
+            case 'up':
                 return [0, -1];
  
-            case 'Down':
+            case 'down':
                 return [0, +1];
  
-            case 'Right':
+            case 'right':
                 return [+1, 0];
  
-            case 'Left':
+            case 'left':
                 return [-1, 0];
         }
     },
@@ -214,7 +234,7 @@ const snake = {
         if(event.code.substring(0,5)=== 'Arrow'){
             event.preventDefault()
             const direction = event.code.split('Arrow')
-            snake.direction = direction[1]
+            snake.direction = direction[1].toLowerCase()
         }
         // Gestion des autres touches
         switch (event.code) {

@@ -20,9 +20,7 @@ const mineSweeper = {
         }
         if(this.nbOfMines ==0){this.nbOfMines =1;}
         this.setMines();
-        document.getElementById('emojiWin').classList.remove('hide')
-        document.getElementById('emojiWin').classList.remove('angry')
-        document.getElementById('emojiWin').classList.remove('happy')
+        app.initEmojiWin();
         if(grid.gridSize> 20 ) {
             grid.gridDiv.classList.add("overflowY")
         }else{grid.gridDiv.classList.remove("overflowY")}
@@ -68,7 +66,12 @@ const mineSweeper = {
     resetMineSweeper(){
        document.getElementById("difficulty").classList.add('hide')
        document.getElementById("nbOfMines").classList.add('hide')
-       document.getElementById("emojiWin").classList.add('hide')
+       app.resetEmojiWin();
+       document.querySelectorAll('.pixel').forEach(function(elt)
+       {                                                                   
+           elt.classList.remove('pixel--hide', 'lightgrey', 'pixel--flag', 'pixel--questionMark')
+           elt.classList.add('pixel--revealed')
+       })
        this.resetCount++ // debug
        console.log('Reset MineSweeper done'+ this.resetCount)
     },
@@ -149,7 +152,7 @@ const mineSweeper = {
                         }
                     }
                     pixel.pixelsArray[i][j].textContent = this.minesArray[i][j]
-                    /* test remplacement 0 par blanc*/
+                    pixel.pixelsArray[i][j].classList.add('pixel--hide')
                     if (this.minesArray[i][j] === 0) {
                         pixel.pixelsArray[i][j].textContent = ''
                     }

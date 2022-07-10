@@ -23,7 +23,7 @@ const pixel = {
     },
     drawPixel() {
         const pixelDiv = document.createElement('div')
-        pixelDiv.classList.add('pixel', this.pixelDrawColor, 'pixel--hide')
+        pixelDiv.classList.add('pixel', this.pixelDrawColor)
         pixelDiv.style.width = this.pixelSize
         pixelDiv.style.height = this.pixelSize
         /* Ajout des évenements sur le pixel*/
