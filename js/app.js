@@ -141,9 +141,9 @@ const app = {
             console.log('Click on ' + evt.target + ' Target ID is : ' + evt.target.id)
         }
         // à mettre dans le snake.reset() ???
-        if(app.previousMode === 'snake'){
+/*         if(app.previousMode === 'snake'){
             clearInterval(snake.intervalId)
-        }
+        } */
         switch(app.currentMode){
             case  'snake':
                 grid.gridSize = 30;
@@ -151,13 +151,14 @@ const app = {
                 
                 break;
             case  'mineSweeper':
-                grid.gridSize = 9;
-                pixel.pixelSize = '25px';
-                
+             //   grid.gridSize = 9;
+                pixel.pixelSize = '25px'; 
+                mineSweeper.difficulty = document.getElementById("difficulty-choice").value
+                mineSweeper.setDifficulty(mineSweeper.difficulty);
                 break;
             case  'g2048':
                 grid.gridSize = 4;
-                pixel.pixelSize = '40px';
+                pixel.pixelSize = '60px';
                 
                 break;
             default:
@@ -179,6 +180,7 @@ const app = {
     // Clique sur Validation tailles pixels et grille
     configClick(event) {
         event.preventDefault();
+        app.gameModeSelected = true;
         const pixelSizeInput = document.getElementById('pixelSize').value
         const gridSizeInput = document.getElementById('gridSize').value
         if(app.currentMode === "mineSweeper" && mineSweeper.difficulty === 'customDiff'){

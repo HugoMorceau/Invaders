@@ -36,6 +36,8 @@ const snake = {
         {                                                                   
             elt.classList.remove('pixel--hide', 'pixel--snakeMode', 'pixel--snake')   
         })
+        clearInterval(snake.intervalId)
+        document.removeEventListener('keydown', snake.handleKeyboard)
         console.log('Reset Snake done') // debug
     },
 

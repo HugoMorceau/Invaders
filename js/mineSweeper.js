@@ -32,30 +32,31 @@ const mineSweeper = {
     },
     handleDifficultySelected(evt){
         mineSweeper.difficulty = evt.target.value
-        mineSweeper.setDifficulty();
+        
+        mineSweeper.setDifficulty(mineSweeper.difficulty);
         app.init();
  
     },
-    setDifficulty(){
-        if(this.difficulty == 'easyDiff'){
+    setDifficulty(difficulty){
+        if(difficulty == 'easyDiff'){
             document.querySelector('.config').classList.add('hide') 
             document.getElementById("difficulty-choice").selectedIndex = 0;
             mineSweeper.nbOfMines = 10
             grid.gridSize = 9
         }
-        if(this.difficulty == 'mediumDiff'){
+        if(difficulty == 'mediumDiff'){
             document.querySelector('.config').classList.add('hide')
             document.getElementById("difficulty-choice").selectedIndex = 1;
             mineSweeper.nbOfMines = 40
             grid.gridSize = 16
         }
-        if(this.difficulty == 'hardDiff'){
+        if(difficulty == 'hardDiff'){
             document.querySelector('.config').classList.add('hide')
             document.getElementById("difficulty-choice").selectedIndex = 2;
             mineSweeper.nbOfMines = 100
             grid.gridSize = 22
         }
-        if(this.difficulty == 'customDiff'){
+        if(difficulty == 'customDiff'){
             document.querySelector('.config').classList.remove('hide')
             document.getElementById("nbOfMines").classList.remove('hide')
             document.getElementById("difficulty-choice").selectedIndex = 3;
