@@ -2,14 +2,22 @@
 /* eslint-disable no-constant-condition */
 const app = {
     firsInit: true,
-    availablesModes: ['invaders', 'mineSweeper', 'snake'],
-    currentMode: 'invaders',
+    availablesModes: ['invaders', 'mineSweeper', 'snake', 'g2048'],
+    currentMode: 'snake',
     previousMode: '',
     bottomMenu: document.querySelector('.bottomMenu'),
     topMenu: document.querySelector('.topMenu'),
     initCount: 0,
     resetCount: 0,
+    gameModeSelected: false,
     init(){
+        // Si le mode n'a pas été init, on l'init
+        if(this.gameModeSelected){
+            this.gameModeSelected = false
+        }else{
+            app.setMode();
+        }
+        
         // DEBUG PURPOSE
         console.log('**********************************************')
         this.initCount++;
@@ -34,6 +42,9 @@ const app = {
             case  'snake':
                 snake.init();
                 break;
+            case  'g2048':
+                g2048.init();
+                break;
             default:
                 invaders.init();
         }
@@ -57,10 +68,14 @@ const app = {
             case 'snake':
                 snake.reset();
                 break;
+            case  '2048':
+                g2048.init();
+                break;
             default: 
                 invaders.resetInvaders();
                 mineSweeper.resetMineSweeper(); 
                 snake.reset();
+                g2048.reset();
                 console.log('Previous mode undefined => reset par defaut')
         }
     },
@@ -107,36 +122,58 @@ const app = {
         // btn Snake 
         const snakeBtn = document.getElementById('snakeBtn');
         snakeBtn.addEventListener('click', app.setMode)     
+        // btn 2048
+        const g2048Btn = document.getElementById('g2048Btn');
+        g2048Btn.addEventListener('click', app.setMode)     
         //btn win or loose
         const winLoseBtn = document.getElementById('emojiWin')
         winLoseBtn.addEventListener('click', app.setMode); // Temporaire => A améliorer directement dans setMode ?
     },
     setMode(evt){
+        
         // Récupération du mode à partir de l'id bouton : modeBtn
         app.previousMode = app.currentMode
-        app.currentMode = evt.target.id.substring(0,evt.target.id.length-3);
-        if(app.currentMode === 'emoji'){
+        
+        if(typeof evt === 'undefined' || app.currentMode === 'emoji' ){
             app.currentMode = app.previousMode;
+        } else{
+            app.currentMode = evt.target.id.substring(0,evt.target.id.length-3);
+            console.log('Click on ' + evt.target + ' Target ID is : ' + evt.target.id)
+        }
+        // à mettre dans le snake.reset() ???
+        if(app.previousMode === 'snake'){
+            clearInterval(snake.intervalId)
         }
         switch(app.currentMode){
             case  'snake':
                 grid.gridSize = 30;
                 pixel.pixelSize = '10px';
-                clearInterval(snake.intervalId)
+                
                 break;
-            // Si l'élement déclencheur est l'emoji Win/Lose, le mode courant ne change pas
-            case  'emoji':
-                console.log('emoji clicked')
+            case  'mineSweeper':
+                grid.gridSize = 9;
+                pixel.pixelSize = '25px';
+                
+                break;
+            case  'g2048':
+                grid.gridSize = 4;
+                pixel.pixelSize = '40px';
+                
+                break;
             default:
+                grid.gridSize = grid.defaultGridSize
+                pixel.pixelSize = pixel.defaultPixelSize
                 console.log('erreur, mode de jeu non défini')
         }
-            
-    /* Debug */
-        console.log('Click on ' + evt.target + ' Target ID is : ' + evt.target.id)
         console.log('Current mode set to : ' + app.currentMode)
         console.log('Previous mode is: ' + app.previousMode);
-    /* end Debug */
-        app.init();
+        if(typeof evt === 'undefined') {
+            console.log('Mode set from app.ini()')
+        }else{
+            app.gameModeSelected = true;
+            app.init();
+        }
+        
     },
 
     // Clique sur Validation tailles pixels et grille
@@ -158,16 +195,3 @@ const app = {
     },
 }
 app.init();
-
-/* let indexIntetval = 0;
-let x = setInterval(mafonction, 1000);
-
-
-function mafonction(){
-    console.log(indexIntetval);
-    indexIntetval++
-    if (indexIntetval > 3){
-        clearInterval(x);
-    }
-};
- */
