@@ -197,3 +197,14 @@ const app = {
     },
 }
 app.init();
+/* testarr = [['0?0', '0?1'],['1?0', '1?1'],];
+console.log(testarr[0]);
+console.log(testarr[1]);
+testarr.reverse();
+console.log('reverse')
+console.log(testarr[0]);
+console.log(testarr[1]);
+testarr[0].reverse();
+console.log('reverse')
+console.log(testarr[0]);
+console.log(testarr[1]); */
