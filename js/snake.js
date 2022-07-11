@@ -1,11 +1,10 @@
 const snake = {
     /* game */
-    mode: 'default',
-    // mode: 'borderless',
+    mode: 'borderless',
     iamAlive: true,
-    defaultSnakeSize: 3,
+    defaultSnakeSize: 5,
     difficulty: [1,2,3],
-    delay: 300, 
+    delay: 125, 
     /* snake */
     snakeSize: 0,
     snakeSpeed: 1,
@@ -23,17 +22,30 @@ const snake = {
     nextPositionType: '',
     direction: 'left',
     lastDirection : 'left',
-    timeoutId : 0,
-    timeoutIdCallBack : 0,
     resetRequired: false,
+    intervalId: 0 ,
+
+    reset(){
+        snake.resetRequired = true;
+        //grid.init();
+        app.resetEmojiWin();
+        snake.snakeBody = []
+        snake.posHead=[0,0],
+        snake.snakeTailPos= [0,0],
+        document.querySelectorAll('.pixel').forEach(function(elt)
+        {                                                                   
+            elt.classList.remove('pixel--hide', 'pixel--snakeMode', 'pixel--snake')   
+        })
+        console.log('Reset Snake done') // debug
+    },
 
     init(){
-        this.direction = 'left'
+        console.log('Init Snake start') // debug
+        this.direction = 'left' 
         this.iamAlive = true
         this.resetRequired = false;
-        console.log('Init Snake start') // debug
-        app.initEmojiWin();
         this.snakeSize = this.defaultSnakeSize
+        app.initEmojiWin();
         this.listenKeyboard()
         let col = Math.round(grid.gridSize/2) 
         let row = Math.floor(grid.gridSize/2) 
@@ -52,29 +64,17 @@ const snake = {
             i++
         }
         this.drawRat();
-        this.timeoutId = setTimeout(this.play, this.delay)
-
-        console.log(this.timeoutId)
         console.log('Init Snake done') // debug
+        // Lancement du jeu
+        snake.intervalId = setInterval(snake.play, snake.delay)
     },
-    reset(){
-        this.resetRequired = true;
-        grid.init();
-        app.resetEmojiWin();
-        snake.snakeBody = []
-        console.log('Reset Snake done') // debug
-    },
-
-    play(){      
-        if(snake.resetRequired) {
-            console.log('RESET REQUIRED PLAY 1')
-            return;
-        }
-        if(snake.iamAlive){
-            snake.moveSnake()
-            this.timeoutIdCallBack = setTimeout(snake.play, snake.delay)           
-        }else{
-            alert('you lose')
+    play(){   
+        snake.moveSnake()
+        if(!snake.iamAlive || snake.resetRequired){
+            clearInterval(snake.intervalId)
+            if(!snake.iamAlive){
+                alert('you lose')
+            }
         }
     },
     setNextPosition(){
@@ -95,47 +95,43 @@ const snake = {
                     this.goThroughWall()
                 }else {
                     this.iamAlive = false
+                    this.iDied = true
                 }
             }
         }
     },
     goThroughWall(){
-        if(this.direction === 'left', 'right'){
+        if(this.direction === 'up' || this.direction === 'down'){
             if (this.nextPosRow < 0){
-                this.nextPosRow = gridSize
+                this.nextPosRow = grid.gridSize -1
             }else {this.nextPosRow = 0}
         }else{
             if (this.nextPosCol < 0){
-                this.nextPosCol = gridSize
+                this.nextPosCol = grid.gridSize -1 
             }else {this.nextPosCol= 0}
         }
-        pixel.pixelsArray[this.nextPosCol][this.nextPosRow]
+        snake.nextPosition = pixel.pixelsArray[this.nextPosCol][this.nextPosRow]
+        snake.nextPositionType = this.whatIsThisPix(snake.nextPosition)
     },
     moveSnake(){  
-        if(this.resetRequired) {
-            console.log('RESET REQUIRED MOVE SNAKE')
-            return;
-        }
         console.log('Position tête : ' + this.posHead)
         console.log('move snake ' + this.direction   )
         this.setNextPosition()
-        if(!this.iamAlive){
-            return;
-        }
         if (this.nextPositionType === 'snake') {
                 // Le serpent ne peut pas reculer
-                if(this.snakeBody[1] === pix){ 
+                if(this.snakeBody[1] === this.nextPosition){ 
                     console.log('annule direction')
                     // on annule la dernière direction  
                     console.log('last dir = ' + snake.lastDirection)             
                     snake.direction = snake.lastDirection
-                    // on rapelle directement moveSnake pour court-circuiter le timeOut
+                    // on rapelle directement moveSnake pour court-circuiter le setIntervall
                     // et éviter d'avoir un double délai à cause du return
                     this.moveSnake(snake.direction)
                     return;
                 } else{
                     console.log('dans le snake')
                     snake.iamAlive = false
+                    this.iDied = true;
                     return;
                 }
         } 
@@ -149,6 +145,7 @@ const snake = {
             else{
                 console.log('dans le mur')
                 snake.iamAlive = false
+                this.iDied = true
                 return;
             }
         }
@@ -171,15 +168,14 @@ const snake = {
         const pix = pixel.pixelsArray[col][row]
         console.log('draw snake : ')
         console.log( pix )
-        pix.classList.remove(pixel.defaultPixelDrawColor)
-        pix.classList.remove(this.ratColor)
-        pix.classList.add(this.snakeColor)
-        this.snakeBody.unshift(pix)
-        
+        pix.classList.remove(pixel.defaultPixelDrawColor,this.ratColor )
+        // pix.classList.remove(this.ratColor)
+        pix.classList.add(this.snakeColor, 'pixel--snake')
+        this.snakeBody.unshift(pix)        
     },
     eraseSnake(pix){//col,row){
         // const pix = pixel.pixelsArray[col][row]
-        pix.classList.remove(this.snakeColor)
+        pix.classList.remove(this.snakeColor,'pixel--snake' )
         pix.classList.add(pixel.defaultPixelDrawColor)
     },
 
@@ -205,7 +201,7 @@ const snake = {
             ratPix = pixel.pixelsArray[col][row]
          } while(this.whatIsThisPix(ratPix) != 'free')
 
-        ratPix.classList.remove(ratPix.classList[1])
+        ratPix.classList.remove(pixel.defaultPixelDrawColor)
         ratPix.classList.add(this.ratColor)
     },
     translateDirection(direction){

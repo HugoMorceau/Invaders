@@ -42,9 +42,6 @@ const app = {
         console.log("Previous app mode = " + app.previousMode + " - Current = " + app.currentMode) //debug
         console.log('Fin initialisation APP') // debug
     },
-    param(){
-
-    },
     reset(){
         // DEBUG PURPOSE
         this.resetCount++;
@@ -62,8 +59,9 @@ const app = {
                 break;
             default: 
                 invaders.resetInvaders();
-                console.log('Previous mode undefined => reset par defaut')
                 mineSweeper.resetMineSweeper(); 
+                snake.reset();
+                console.log('Previous mode undefined => reset par defaut')
         }
     },
     initEmojiWin(){
@@ -111,24 +109,33 @@ const app = {
         snakeBtn.addEventListener('click', app.setMode)     
         //btn win or loose
         const winLoseBtn = document.getElementById('emojiWin')
-        winLoseBtn.addEventListener('click', app.setModeBis); // Temporaire => A améliorer directement dans setMode ?
+        winLoseBtn.addEventListener('click', app.setMode); // Temporaire => A améliorer directement dans setMode ?
     },
     setMode(evt){
         // Récupération du mode à partir de l'id bouton : modeBtn
         app.previousMode = app.currentMode
         app.currentMode = evt.target.id.substring(0,evt.target.id.length-3);
+        if(app.currentMode === 'emoji'){
+            app.currentMode = app.previousMode;
+        }
+        switch(app.currentMode){
+            case  'snake':
+                grid.gridSize = 30;
+                pixel.pixelSize = '10px';
+                clearInterval(snake.intervalId)
+                break;
+            // Si l'élement déclencheur est l'emoji Win/Lose, le mode courant ne change pas
+            case  'emoji':
+                console.log('emoji clicked')
+            default:
+                console.log('erreur, mode de jeu non défini')
+        }
+            
     /* Debug */
         console.log('Click on ' + evt.target + ' Target ID is : ' + evt.target.id)
         console.log('Current mode set to : ' + app.currentMode)
         console.log('Previous mode is: ' + app.previousMode);
     /* end Debug */
-        app.init();
-    },
-    setModeBis(){
-        app.previousMode = app.currentMode
-        // Récupération du mode à partir de l'id bouton : modeBtn
-        app.currentMode = 'mineSweeper';
-        console.log('click on emojiWin')
         app.init();
     },
 
@@ -152,3 +159,15 @@ const app = {
 }
 app.init();
 
+/* let indexIntetval = 0;
+let x = setInterval(mafonction, 1000);
+
+
+function mafonction(){
+    console.log(indexIntetval);
+    indexIntetval++
+    if (indexIntetval > 3){
+        clearInterval(x);
+    }
+};
+ */

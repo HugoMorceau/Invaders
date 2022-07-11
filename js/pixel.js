@@ -36,6 +36,9 @@ const pixel = {
             pixelDiv.classList.add('pixel--mineSweeper')
             pixelDiv.style.fontSize = this.pixelSize
         }
+        if(app.currentMode === 'snake'){
+           pixelDiv.classList.add('pixel--snakeMode') 
+        }
         return pixelDiv;
     },
     // Gestion clique droit pixel demineur
