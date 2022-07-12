@@ -3,87 +3,126 @@ const g2048 = {
     arrowKeyPressed: false,
     stateChanged: true,
     direction: '',
-    intervalId: 0,
-    delai: 250,
-    playCount: 0,
-    lastMerged: '',
-
+    alreadyMerged: false,
     reset() {
         document.removeEventListener('keydown', g2048.handleKeyboard)
     },
     init() {
 
-        // alert('en cours de développement...')
         g2048.listenKeyboard()
-        // Génération du premier nombre
         g2048.generateNumber()
-        //g2048.intervalId = setInterval(g2048.play, g2048.delai)
+        g2048.generateNumber()
         g2048.play()
     },
     generateNumber() {
-        const col = grid.randomNum()
-        const row = grid.randomNum()
-        // on détermine aléatoirement si il s'agit d'un 2 d'un 4
-        // la probabilité d'avoir un 4 est de 10%
+        let col
+        let row
+        do{
+            col = grid.randomNum()
+            row = grid.randomNum()
+        } while(pixel.pixelsArray[col][row].textContent != '')
 
-        if (Math.floor(Math.random() * (10 - 1)) + 1 === 4) {
-            pixel.pixelsArray[col][row].textContent = '4';
-        } else { pixel.pixelsArray[col][row].textContent = '2'; }
+        // on détermine aléatoirement si il s'agit d'un 2 d'un 4
+        // la probabilité d'avoir un 4 est de 5%
+        if (Math.floor(Math.random() * (20 - 1)) + 1 === 4) {
+            pixel.pixelsArray[col][row].textContent = 4;
+        } else { 
+            pixel.pixelsArray[col][row].textContent = 2; 
+        }
     },
     play() {
-
         if (g2048.alive) {
-            console.log('g2048.play() count = ' + g2048.playCount++)
             if (g2048.arrowKeyPressed) {
+
                 g2048.arrowKeyPressed = false
-                // si une touche fléchée a été activée
-                let col
-                let row
-                switch (g2048.direction) {
-                    // La position de départ est à l'opposé de la direction
-                    case 'left':
-                        // droite gauche haut bas
-                        col = 3
-                        row = 0
-                        break;
-                    case 'right':
-                        //gauche droite haut bas
-                        col = 0
-                        row = 0
-                        break;
-                    case 'up':
-                        // gauche droite bas haut
-                        col = 0
-                        row = 3
-                        break;
-                    case 'down':
-                        // gauche droite haut bas
-                        col = 0
-                        row = 0
-                        break;
-                }
 
-                g2048.readGrid()
-
+                g2048.transposeGrid('convert')
+                g2048.mergeNumbers()
+                g2048.moveNumbers(g2048.direction)
+                g2048.transposeGrid('restore')      
+                
                 if (g2048.stateChanged) {
                     g2048.stateChanged = false
                     g2048.generateNumber()
                 }
             }
         } else {
-            clearInterval(g2048.intervalId)
             alert('you lose')
         }
     },
-
-
-
+    transpose(matrix) {
+        return matrix[0].map((col, i) => matrix.map(row => row[i]));
+    },
+    transposeGrid(mode){
+      // Selon la direction demandée, on transpose la grille pour pouvoir
+        // toujours faire une analyse de gauche à droite et de haut en bas
+        if (this.direction === 'right') {
+            // inversion de la ligne du tableau pour pouvoir la lire toujours dans le même ordre quelque soit la directio demandée
+            pixel.pixelsArray.reverse();
+        }
+        if (this.direction === 'up') {
+            // inversion de la ligne du tableau pour pouvoir la lire toujours dans le même ordre quelque soit la directio demandée
+            pixel.pixelsArray = g2048.transpose(pixel.pixelsArray)
+        }
+        if (this.direction === 'down') {
+            // inversion de la ligne du tableau pour pouvoir la lire toujours dans le même ordre quelque soit la directio demandée
+            if(mode === 'convert'){
+                pixel.pixelsArray = g2048.transpose(pixel.pixelsArray).reverse()
+            }else {
+                pixel.pixelsArray = g2048.transpose(pixel.pixelsArray.reverse())
+            }
+        }
+    },
+    mergeNumbers(){
+    // Fusionne les nombres
+        for (let row= 0; row < grid.gridSize; row++) {
+            for (let col = 0; col < grid.gridSize; col++){  
+                // pour chaque col de row
+                let pix = pixel.pixelsArray[col][row].textContent
+                if (pix != ''){                    
+                    let nextCol = col +1 
+                    let nextPix = ''   
+                    while(nextPix === '' && nextCol < grid.gridSize){
+                        nextPix = pixel.pixelsArray[nextCol][row].textContent
+                        if(nextPix === pix){
+                            pixel.pixelsArray[col][row].textContent = 2 * parseInt(pix, 10)
+                            pixel.pixelsArray[nextCol][row].textContent = ''
+                            g2048.stateChanged = true
+                            col ++ // on peut skip l'analyse du prochain pixel puisqu'il vient d'être mis à ' ' 
+                            break
+                        }
+                        nextCol++
+                    } 
+                }
+            }
+        }
+    },
+    moveNumbers(){
+        for (let row= 0; row < grid.gridSize; row++) {
+            for (let col = 0; col < grid.gridSize; col++){ 
+                let pix = pixel.pixelsArray[col][row].textContent
+                if(pix === '') {
+                    let nextCol = col +1 
+                    let nextPix = ''   
+                    while(nextPix === '' && nextCol < grid.gridSize){
+                        nextPix = pixel.pixelsArray[nextCol][row].textContent
+                        if(nextPix != ''){
+                            pixel.pixelsArray[col][row].textContent = parseInt(nextPix, 10)
+                            pixel.pixelsArray[nextCol][row].textContent = ''
+                            g2048.stateChanged = true
+                            break
+                        }
+                        nextCol++
+                    }
+                }
+            }
+        }
+    },
     // EVENTS LISTENERS / HANDLERS
     listenKeyboard() {
         document.addEventListener('keydown', g2048.handleKeyboard)
     },
     handleKeyboard(event) {
-        console.log(event.code)
         if (event.code.substring(0, 5) === 'Arrow') {
             event.preventDefault()
             g2048.direction = event.code.split('Arrow')[1].toLowerCase()
@@ -100,66 +139,4 @@ const g2048 = {
                 break;
         }
     },
-
-
-    readGrid() {
-        // analyse et fusion de droite à gauche
-
-        for (let row = 0; row < grid.gridSize; row++) {
-            console.log('analyse de la ligne '+ row)
-            if (this.direction = 'left') {
-                // inversion de la ligne du tableau pour pouvoir la lire toujours dans le même ordre quelque soit la directio demandée
-                pixel.pixelsArray[row].reverse();
-            }
-            for (let col = 0; col < grid.gridSize -1; col++) {
-                //pixel de comparaison
-                console.log('analyse de la colonne '+ col)
-                if (g2048.direction = 'left' || g2048.direction === 'right') {
-
-                    let rowCompare = row
-                    let colCompare = col + 1
-                    // nom raccourcis
-                    let currentPixel = pixel.pixelsArray[col][row]
-                    let comparedPixel = pixel.pixelsArray[colCompare][rowCompare]
-
-                    if (currentPixel.textContent != 0) {
-                        if(g2048.alreadyMerged && currentPixel != g2048.lastMerged){
-                            g2048.alreadyMerged = false
-                            g2048.lastMerged = ''
-                        }
-                        // addittionne les deux cellules identiques
-                        if (currentPixel.textContent === comparedPixel.textContent && !g2048.alreadyMerged) {
-                            // on double la valeur du pixel
-                            pixel.pixelsArray[col][row].textContent += currentPixel.textContent
-                            pixel.pixelsArray[colCompare][rowCompare] = 0
-                            // un même pixel ne peut fusionner qu'une seule fois par mouvement
-                            g2048.alreadyMerged = true 
-                            // sauvegarde du pixel
-                            currentPixel = pixel.pixelsArray[col][row]
-                        }
-                        // Check les cellules vides à gauche
-                        colCompare = col - 1
-                        while (pixel.pixelsArray[colCompare][row].textContent === 0 && colCompare > 0) {
-                            let freeCell = true
-                            // on déplace le pixel en cours d'analyse jusqu'à la cellule libre la plus à gauche
-                            pixel.pixelsArray[colCompare][row].textContent = pixel.pixelsArray[col][row].textContent
-                            // refresh sav pixel
-                            currentPixel = pixel.pixelsArray[colCompare][row]
-                            colCompare--
-                        }
-                        // sauvegarde du dernier pixel fusionné
-                        if(g2048.alreadyMerged){
-                            g2048.lastMerged = currentPixel
-                        }
-
-
-                    } else {
-                        //free cell = true
-                    }
-                }
-
-            }
-        }
-    },
-
 }
