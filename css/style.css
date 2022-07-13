@@ -275,6 +275,8 @@ body {
     font-weight: bold;
     text-align: end;
     transition: transform .2s;
+    margin: 3px;
+    border-radius: 5%;
 }
 
 .pixel--2048-dark{
