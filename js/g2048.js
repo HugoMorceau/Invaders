@@ -3,7 +3,6 @@ const g2048 = {
     arrowKeyPressed: false,
     stateChanged: true,
     direction: '',
-    alreadyMerged: false,
     reset() {
         document.removeEventListener('keydown', g2048.handleKeyboard)
     },
@@ -57,7 +56,7 @@ const g2048 = {
         setTimeout(()=>{
             pix.classList.toggle('pixel--transition')
            // pix.classList.toggle('pixel--transition-out')
-        }, 100)
+        }, 75)
     },
     play() {
         if (g2048.alive) {
@@ -108,6 +107,7 @@ const g2048 = {
             for (let col = 0; col < grid.gridSize; col++){  
                 // pour chaque col de row
                 let pix = pixel.pixelsArray[col][row].textContent
+                pixel.pixelsArray[col][row].setAttribute('merged', 'false')
                 if (pix != ''){                    
                     let nextCol = col +1 
                     let nextPix = ''   
@@ -116,14 +116,15 @@ const g2048 = {
                         if(nextPix === pix){
                             g2048.removePixelColor(pixel.pixelsArray[col][row])
                             pixel.pixelsArray[col][row].textContent = 2 * parseInt(pix, 10)
+                            pixel.pixelsArray[col][row].setAttribute('merged', 'true')
                             g2048.setPixelColor(pixel.pixelsArray[col][row])
-                            g2048.zoomZoomZangDansTaBenzBenzBenz(pixel.pixelsArray[col][row])
                             g2048.removePixelColor(pixel.pixelsArray[nextCol][row])
                             pixel.pixelsArray[nextCol][row].textContent = ''
+                            pixel.pixelsArray[nextCol][row].setAttribute('merged', 'false')
                             g2048.stateChanged = true
                             col ++ // on peut skip l'analyse du prochain pixel puisqu'il vient d'être mis à ' ' 
                             break
-                        }
+                        } 
                         nextCol++
                     } 
                 }
@@ -133,23 +134,46 @@ const g2048 = {
     moveNumbers(){
         for (let row= 0; row < grid.gridSize; row++) {
             for (let col = 0; col < grid.gridSize; col++){ 
+                
+                pixelMouved = false
+                pixelMerged = false
+                
                 let pix = pixel.pixelsArray[col][row].textContent
+                // Pour chaque pixel libre
                 if(pix === '') {
                     let nextCol = col +1 
                     let nextPix = ''   
+                    // Regarde les pixels suivants
+                    
                     while(nextPix === '' && nextCol < grid.gridSize){
                         nextPix = pixel.pixelsArray[nextCol][row].textContent
                         if(nextPix != ''){
+                            // Déplace le pixel suivant ou sur-suivant sur le pixel libre
                             g2048.removePixelColor(pixel.pixelsArray[col][row])
                             pixel.pixelsArray[col][row].textContent = parseInt(nextPix, 10)
+                            if(pixel.pixelsArray[nextCol][row].getAttribute('merged')=== 'true'){
+                                pixelMouved = true
+                                pixelMerged = true
+                            }
                             g2048.setPixelColor(pixel.pixelsArray[col][row])
                             g2048.removePixelColor(pixel.pixelsArray[nextCol][row])
                             pixel.pixelsArray[nextCol][row].textContent = ''
+                            pixel.pixelsArray[nextCol][row].setAttribute('merged', 'false')
                             g2048.stateChanged = true
                             break
                         }
                         nextCol++
                     }
+                }
+                // Si le pixel a été mergé, il faut l'animer, 
+                // à sa nouvelle position si elle a changée
+                if(!pixelMouved){
+                    if(pixel.pixelsArray[col][row].getAttribute('merged') === 'true'){
+                        pixelMerged = true
+                    }
+                }
+                if (pixelMerged){
+                    g2048.zoomZoomZangDansTaBenzBenzBenz(pixel.pixelsArray[col][row])
                 }
             }
         }

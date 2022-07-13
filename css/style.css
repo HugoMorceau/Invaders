@@ -271,7 +271,7 @@ body {
 /* 2048 */
 .pixel--2048{
     background-color:#CCC1B4;
-    font-size: 2rem;
+    font-size: 1.5rem;
     font-weight: bold;
     text-align: end;
     transition: transform .2s;
@@ -284,7 +284,7 @@ body {
     color: #f9f6f2;
 }
 .pixel--transition{
-    transform: scale(1.25);
+    transform: scale(1.15);
 }
 /* .pixel--transition-out{
     transform: scale(0.8);
