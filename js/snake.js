@@ -26,6 +26,7 @@ const snake = {
     intervalId: 0 ,
 
     reset(){
+        
         snake.resetRequired = true;
         //grid.init();
         app.resetEmojiWin();
@@ -42,6 +43,7 @@ const snake = {
     },
 
     init(){
+        app.currentMode = 'snake'
         console.log('Init Snake start') // debug
         this.direction = 'left' 
         this.iamAlive = true

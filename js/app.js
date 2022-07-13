@@ -3,7 +3,7 @@
 const app = {
     firsInit: true,
     availablesModes: ['invaders', 'mineSweeper', 'snake', '2048'],
-    currentMode: '2048',
+    currentMode: 'invaders',
     previousMode: '',
     bottomMenu: document.querySelector('.bottomMenu'),
     topMenu: document.querySelector('.topMenu'),
@@ -130,24 +130,20 @@ const app = {
         winLoseBtn.addEventListener('click', app.setMode); // Temporaire => A améliorer directement dans setMode ?
     },
     setMode(evt){
-        
-        // Récupération du mode à partir de l'id bouton : modeBtn
         app.previousMode = app.currentMode
-        
-        if(typeof evt === 'undefined' || app.currentMode === 'emoji' ){
-            app.currentMode = app.previousMode;
-        } else{
+        if(typeof evt != 'undefined'){
             app.currentMode = evt.target.id.substring(0,evt.target.id.length-3);
-            console.log('Click on ' + evt.target + ' Target ID is : ' + evt.target.id)
+            console.log('Click on ' + evt.target + ' Target ID is : ' + evt.target.id)      
+        } 
+        if ( typeof evt === 'undefined' || app.currentMode === 'emoji' ){
+            app.currentMode = app.previousMode;
         }
         switch(app.currentMode){
             case  'snake':
                 grid.gridSize = 30;
                 pixel.pixelSize = '10px';
-                
                 break;
             case  'mineSweeper':
-             //   grid.gridSize = 9;
                 pixel.pixelSize = '25px'; 
                 mineSweeper.difficulty = document.getElementById("difficulty-choice").value
                 mineSweeper.setDifficulty(mineSweeper.difficulty);
@@ -155,12 +151,11 @@ const app = {
             case  '2048':
                 grid.gridSize = 4;
                 pixel.pixelSize = '60px';   
-                pixel.pixelDrawColor = 'pixel--2048'             
                 break;
             default:
                 grid.gridSize = grid.defaultGridSize
                 pixel.pixelSize = pixel.defaultPixelSize
-                console.log('erreur, mode de jeu non défini')
+                console.log('mode de jeu par défaut')
         }
         console.log('Current mode set to : ' + app.currentMode)
         console.log('Previous mode is: ' + app.previousMode);

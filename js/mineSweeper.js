@@ -71,7 +71,7 @@ const mineSweeper = {
        document.querySelectorAll('.pixel').forEach(function(elt)
        {                                                                   
            elt.classList.remove('pixel--hide', 'lightgrey', 'pixel--flag', 'pixel--questionMark')
-           elt.classList.add('pixel--revealed')
+           // elt.classList.add('pixel--revealed')
        })
        this.resetCount++ // debug
        console.log('Reset MineSweeper done'+ this.resetCount)

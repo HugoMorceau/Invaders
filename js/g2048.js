@@ -5,9 +5,21 @@ const g2048 = {
     direction: '',
     reset() {
         document.removeEventListener('keydown', g2048.handleKeyboard)
+        app.resetEmojiWin();
+        pixel.pixelDrawColor = pixel.defaultPixelDrawColor;
+        document.querySelectorAll('.pixel--2048').forEach(function(elt)
+        {         
+            for (let i = elt.classList.length - 1; i >= 0; i--) {
+                const className = elt.classList[i];
+                if (className.startsWith('pixel--2048')) {
+                    elt.classList.remove(className);
+                }
+            }                                                           
+        })
     },
     init() {
-
+         app.currentMode = '2048'
+        app.initEmojiWin();
         g2048.listenKeyboard()
         g2048.generateNumber()
         g2048.generateNumber()
