@@ -29,6 +29,33 @@ const g2048 = {
         } else { 
             pixel.pixelsArray[col][row].textContent = 2; 
         }
+        g2048.setPixelColor(pixel.pixelsArray[col][row])
+    },
+    removePixelColor(pix){
+        if(pix.textContent < 8){
+            pix.classList.remove('pixel--2048-light')
+            pix.classList.add('pixel--2048-dark')
+        }else{
+            pix.classList.remove('pixel--2048-dark')
+            pix.classList.add('pixel--2048-light')
+        }
+        pix.classList.remove('pixel--2048-' + pix.textContent)
+    },
+    setPixelColor(pix){
+        if(pix.textContent < 8){
+            pix.classList.remove('pixel--2048-light')
+            pix.classList.add('pixel--2048-dark')
+        }else{
+            pix.classList.remove('pixel--2048-dark')
+            pix.classList.add('pixel--2048-light')
+        }
+        pix.classList.toggle('pixel--transition')
+        //pix.classList.toggle('pixel--transition-out')
+        pix.classList.add('pixel--2048-' + pix.textContent)
+        setTimeout(()=>{
+            pix.classList.toggle('pixel--transition')
+           // pix.classList.toggle('pixel--transition-out')
+        }, 100)
     },
     play() {
         if (g2048.alive) {
@@ -85,7 +112,10 @@ const g2048 = {
                     while(nextPix === '' && nextCol < grid.gridSize){
                         nextPix = pixel.pixelsArray[nextCol][row].textContent
                         if(nextPix === pix){
+                            g2048.removePixelColor(pixel.pixelsArray[col][row])
                             pixel.pixelsArray[col][row].textContent = 2 * parseInt(pix, 10)
+                            g2048.setPixelColor(pixel.pixelsArray[col][row])
+                            g2048.removePixelColor(pixel.pixelsArray[nextCol][row])
                             pixel.pixelsArray[nextCol][row].textContent = ''
                             g2048.stateChanged = true
                             col ++ // on peut skip l'analyse du prochain pixel puisqu'il vient d'être mis à ' ' 
@@ -107,7 +137,10 @@ const g2048 = {
                     while(nextPix === '' && nextCol < grid.gridSize){
                         nextPix = pixel.pixelsArray[nextCol][row].textContent
                         if(nextPix != ''){
+                            g2048.removePixelColor(pixel.pixelsArray[col][row])
                             pixel.pixelsArray[col][row].textContent = parseInt(nextPix, 10)
+                            g2048.setPixelColor(pixel.pixelsArray[col][row])
+                            g2048.removePixelColor(pixel.pixelsArray[nextCol][row])
                             pixel.pixelsArray[nextCol][row].textContent = ''
                             g2048.stateChanged = true
                             break

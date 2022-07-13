@@ -67,7 +67,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    /*border: #000000 2px solid;*/
+    background-color: #BCAC9F;
 }  
 .grid--border{
     border: #000000 2px solid;
@@ -268,6 +268,63 @@ body {
     display: none;
 }
 
+/* 2048 */
+.pixel--2048{
+    background-color:#CCC1B4;
+    font-size: 2rem;
+    font-weight: bold;
+    text-align: end;
+    transition: transform .2s;
+}
+
+.pixel--2048-dark{
+    color: #776e65;    
+}
+.pixel--2048-light{
+    color: #f9f6f2;
+}
+.pixel--transition{
+    transform: scale(1.25);
+}
+.pixel--transition-out{
+    transform: scale(0.8);
+}
+  
+.pixel--2048-2{
+    background-color: #eee4da;
+}
+.pixel--2048-4{
+    background-color: #ede0c8;
+}
+.pixel--2048-8{
+    background-color: #f2b179;
+}
+.pixel--2048-16{
+    background-color: #f59563;
+}
+.pixel--2048-32{
+    background-color:#f67c5f;
+}
+.pixel--2048-64{
+    background-color: #f65e3b
+}
+.pixel--2048-128{
+    background-color:#edcf72;
+}
+.pixel--2048-256{
+    background-color: #edcc61;
+}
+
+.pixel--2048-512{
+    background-color:#edc850;
+}
+.pixel--2048-1024{
+    background-color:#edc53f;
+}
+.pixel--2048-2048{
+    background-color: #edc22e;
+}
+/* 2048 end */
 
 /* ANIMATED BOUTON */
 .animatedBtn {

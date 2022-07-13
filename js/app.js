@@ -2,8 +2,8 @@
 /* eslint-disable no-constant-condition */
 const app = {
     firsInit: true,
-    availablesModes: ['invaders', 'mineSweeper', 'snake', 'g2048'],
-    currentMode: 'g2048',
+    availablesModes: ['invaders', 'mineSweeper', 'snake', '2048'],
+    currentMode: '2048',
     previousMode: '',
     bottomMenu: document.querySelector('.bottomMenu'),
     topMenu: document.querySelector('.topMenu'),
@@ -42,7 +42,7 @@ const app = {
             case  'snake':
                 snake.init();
                 break;
-            case  'g2048':
+            case  '2048':
                 g2048.init();
                 break;
             default:
@@ -69,7 +69,7 @@ const app = {
                 snake.reset();
                 break;
             case  '2048':
-                g2048.init();
+                g2048.reset();
                 break;
             default: 
                 invaders.resetInvaders();
@@ -123,7 +123,7 @@ const app = {
         const snakeBtn = document.getElementById('snakeBtn');
         snakeBtn.addEventListener('click', app.setMode)     
         // btn 2048
-        const g2048Btn = document.getElementById('g2048Btn');
+        const g2048Btn = document.getElementById('2048Btn');
         g2048Btn.addEventListener('click', app.setMode)     
         //btn win or loose
         const winLoseBtn = document.getElementById('emojiWin')
@@ -140,10 +140,6 @@ const app = {
             app.currentMode = evt.target.id.substring(0,evt.target.id.length-3);
             console.log('Click on ' + evt.target + ' Target ID is : ' + evt.target.id)
         }
-        // à mettre dans le snake.reset() ???
-/*         if(app.previousMode === 'snake'){
-            clearInterval(snake.intervalId)
-        } */
         switch(app.currentMode){
             case  'snake':
                 grid.gridSize = 30;
@@ -156,10 +152,10 @@ const app = {
                 mineSweeper.difficulty = document.getElementById("difficulty-choice").value
                 mineSweeper.setDifficulty(mineSweeper.difficulty);
                 break;
-            case  'g2048':
+            case  '2048':
                 grid.gridSize = 4;
-                pixel.pixelSize = '60px';
-                
+                pixel.pixelSize = '60px';   
+                pixel.pixelDrawColor = 'pixel--2048'             
                 break;
             default:
                 grid.gridSize = grid.defaultGridSize
