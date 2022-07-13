@@ -286,9 +286,9 @@ body {
 .pixel--transition{
     transform: scale(1.25);
 }
-.pixel--transition-out{
+/* .pixel--transition-out{
     transform: scale(0.8);
-}
+} */
   
 .pixel--2048-2{
     background-color: #eee4da;
