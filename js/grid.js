@@ -1,5 +1,5 @@
 const grid = {
-    defaultGridSize: 20,
+    defaultGridSize: 9,
     gridSize: 0,
 
     gridDiv: document.querySelector('#grid'),
