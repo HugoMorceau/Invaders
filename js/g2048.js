@@ -90,9 +90,7 @@ const g2048 = {
             alert('you lose')
         }
     },
-    transpose(matrix) {
-        return matrix[0].map((col, i) => matrix.map(row => row[i]));
-    },
+  
     transposeGrid(mode){
       // Selon la direction demandée, on transpose la grille pour pouvoir
         // toujours faire une analyse de gauche à droite et de haut en bas
@@ -102,14 +100,14 @@ const g2048 = {
         }
         if (this.direction === 'up') {
             // inversion de la ligne du tableau pour pouvoir la lire toujours dans le même ordre quelque soit la directio demandée
-            pixel.pixelsArray = g2048.transpose(pixel.pixelsArray)
+            pixel.pixelsArray = app.transpose(pixel.pixelsArray)
         }
         if (this.direction === 'down') {
             // inversion de la ligne du tableau pour pouvoir la lire toujours dans le même ordre quelque soit la directio demandée
             if(mode === 'convert'){
-                pixel.pixelsArray = g2048.transpose(pixel.pixelsArray).reverse()
+                pixel.pixelsArray = app.transpose(pixel.pixelsArray).reverse()
             }else {
-                pixel.pixelsArray = g2048.transpose(pixel.pixelsArray.reverse())
+                pixel.pixelsArray = app.transpose(pixel.pixelsArray.reverse())
             }
         }
     },

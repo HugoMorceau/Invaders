@@ -2,8 +2,8 @@
 /* eslint-disable no-constant-condition */
 const app = {
     firsInit: true,
-    availablesModes: ['invaders', 'mineSweeper', 'snake', '2048'],
-    currentMode: 'invaders',
+    availablesModes: ['invaders', 'mineSweeper', 'snake', '2048', 'tetris'],
+    currentMode: 'tetris',
     previousMode: '',
     bottomMenu: document.querySelector('.bottomMenu'),
     topMenu: document.querySelector('.topMenu'),
@@ -28,7 +28,7 @@ const app = {
             invaders.initColorPalette();
         }
         app.reset();
-        app.listenEvents();
+        // app.listenEvents();
         pixel.init();
         grid.init();
 
@@ -44,6 +44,9 @@ const app = {
                 break;
             case  '2048':
                 g2048.init();
+                break;
+            case 'tetris':
+                tetris.init();
                 break;
             default:
                 invaders.init();
@@ -71,11 +74,15 @@ const app = {
             case  '2048':
                 g2048.reset();
                 break;
+            case  'tetris':
+                tetris.reset();
+                break;
             default: 
                 invaders.resetInvaders();
                 mineSweeper.resetMineSweeper(); 
                 snake.reset();
                 g2048.reset();
+                tetris.reset();
                 console.log('Previous mode undefined => reset par defaut')
         }
     },
@@ -96,6 +103,7 @@ const app = {
             modeBtn.classList.add('btn', 'menuBtn')
             this.animateBtn(modeBtn)
             navTop.appendChild(modeBtn)
+            modeBtn.addEventListener('click', app.setMode);
         }); 
     },
     animateBtn(btn){
@@ -109,9 +117,9 @@ const app = {
         btn.appendChild(span)
         console.log("animation du bouton : " + btn)
     },
-  
-    // Ajout des écouteurs communs à la page
-    listenEvents(){
+
+    // method listenEvents remplacée par l'ajout de l'event directement à la création des boutons dans initModesMenu()
+  /*   listenEvents(){
         // A FAIRE :  Automatiser la création des ecouteurs via le tableau des modes  
         // btn demineur
         const msBtn = document.getElementById('mineSweeperBtn');
@@ -125,10 +133,13 @@ const app = {
         // btn 2048
         const g2048Btn = document.getElementById('2048Btn');
         g2048Btn.addEventListener('click', app.setMode)     
+        // btn tetris
+        const tetrisBtn = document.getElementById('tetrisBtn');
+        g2048Btn.addEventListener('click', app.setMode)    
         //btn win or loose
         const winLoseBtn = document.getElementById('emojiWin')
         winLoseBtn.addEventListener('click', app.setMode); // Temporaire => A améliorer directement dans setMode ?
-    },
+    }, */
     setMode(evt){
         app.previousMode = app.currentMode
         if(typeof evt != 'undefined'){
@@ -185,6 +196,9 @@ const app = {
             pixel.pixelSize = pixelSizeInput + 'px';
             app.init();
         }
+    },
+    transpose(matrix) {
+        return matrix[0].map((col, i) => matrix.map(row => row[i]));
     },
 }
  app.init();
