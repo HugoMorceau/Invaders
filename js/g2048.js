@@ -29,8 +29,8 @@ const g2048 = {
         let col
         let row
         do{
-            col = grid.randomNum()
-            row = grid.randomNum()
+            col = grid.randomNum(grid.col)
+            row = grid.randomNum(grid.row)
         } while(pixel.pixelsArray[col][row].textContent != '')
 
         // on détermine aléatoirement si il s'agit d'un 2 d'un 4
@@ -113,15 +113,15 @@ const g2048 = {
     },
     mergeNumbers(){
     // Fusionne les nombres
-        for (let row= 0; row < grid.gridSize; row++) {
-            for (let col = 0; col < grid.gridSize; col++){  
+        for (let row= 0; row < grid.row; row++) {
+            for (let col = 0; col < grid.col; col++){  
                 // pour chaque col de row
                 let pix = pixel.pixelsArray[col][row].textContent
                 pixel.pixelsArray[col][row].setAttribute('merged', 'false')
                 if (pix != ''){                    
                     let nextCol = col +1 
                     let nextPix = ''   
-                    while(nextPix === '' && nextCol < grid.gridSize){
+                    while(nextPix === '' && nextCol < grid.col){
                         nextPix = pixel.pixelsArray[nextCol][row].textContent
                         if(nextPix === pix){
                             g2048.removePixelColor(pixel.pixelsArray[col][row])
@@ -142,8 +142,8 @@ const g2048 = {
         }
     },
     moveNumbers(){
-        for (let row= 0; row < grid.gridSize; row++) {
-            for (let col = 0; col < grid.gridSize; col++){ 
+        for (let row= 0; row < grid.row; row++) {
+            for (let col = 0; col < grid.col; col++){ 
                 
                 pixelMouved = false
                 pixelMerged = false
@@ -155,7 +155,7 @@ const g2048 = {
                     let nextPix = ''   
                     // Regarde les pixels suivants
                     
-                    while(nextPix === '' && nextCol < grid.gridSize){
+                    while(nextPix === '' && nextCol < grid.col){
                         nextPix = pixel.pixelsArray[nextCol][row].textContent
                         if(nextPix != ''){
                             // Déplace le pixel suivant ou sur-suivant sur le pixel libre

@@ -1,27 +1,28 @@
 const grid = {
     defaultSize: 35,
-    row: 10,
-    col: 3,
+    row: 0,
+    col: 0,
     size: 0,
     gridDiv: document.querySelector('#grid'),
 
     init() {
         console.log('Début Initialisation grille') // debug
-        grid.size = grid.row * grid.col
-        if (grid.size == 0 || grid.size == '') {
+        if (grid.row == 0 || grid.row == '') {
             grid.row = grid.defaultSize
-            grid.col = grid.defaultSize
-            grid.size = grid.row * grid.col
         }
+        if (grid.row == 0 || grid.row == '') {
+            grid.col = grid.defaultSize
+         }
+        grid.size = grid.row * grid.col
+        
         grid.draw();
         console.log('Fin Initialisation grille') // debug
     },
     clear() {
         document.querySelectorAll('div.column').forEach(e => e.remove());
     },
-    randomNum() {
+    randomNum(max) {
         const MIN = 0;
-        const max = grid.size
         return Math.floor(Math.random() * (max - MIN)) + MIN;
     },
     //Invaders

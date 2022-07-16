@@ -14,14 +14,14 @@ const mineSweeper = {
         this.initCheckArray();
         pixel.pixelDrawColor = pixel.defaultPixelDrawColor
         // On ne peut pas avoir plus de bombes que de cases de la grille
-        if (this.nbOfMines > grid.gridSize * grid.gridSize){
-            this.nbOfMines = grid.gridSize * grid.gridSize -1 ;
+        if (this.nbOfMines > grid.gridSize){
+            this.nbOfMines = grid.gridSize -1 ;
             console.log('nombre de bombe defini par defaut')
         }
         if(this.nbOfMines ==0){this.nbOfMines =1;}
         this.setMines();
         app.initEmojiWin();
-        if(grid.gridSize> 20 ) {
+        if(grid.row> 22 ) {
             grid.gridDiv.classList.add("overflowY")
         }else{grid.gridDiv.classList.remove("overflowY")}
 
@@ -42,19 +42,23 @@ const mineSweeper = {
             document.querySelector('.config').classList.add('hide') 
             document.getElementById("difficulty-choice").selectedIndex = 0;
             mineSweeper.nbOfMines = 10
-            grid.gridSize = 9
+            grid.row = 9
+            grid.col = 9
+
         }
         if(difficulty == 'mediumDiff'){
             document.querySelector('.config').classList.add('hide')
             document.getElementById("difficulty-choice").selectedIndex = 1;
             mineSweeper.nbOfMines = 40
-            grid.gridSize = 16
+            grid.row = 16
+            grid.col = 16
         }
         if(difficulty == 'hardDiff'){
             document.querySelector('.config').classList.add('hide')
             document.getElementById("difficulty-choice").selectedIndex = 2;
             mineSweeper.nbOfMines = 100
-            grid.gridSize = 22
+            grid.row = 21
+            grid.col = 21
         }
         if(difficulty == 'customDiff'){
             document.querySelector('.config').classList.remove('hide')
@@ -87,9 +91,9 @@ const mineSweeper = {
     initMinesArray(){
         this.minesArray= []
         // useless ?
-        for (let i = 0; i < grid.gridSize +2; i++) {
+        for (let i = 0; i < grid.col +2; i++) {
             this.minesArray[i] = [''];
-            for (let j = 0; j < grid.gridSize+2; j++) {
+            for (let j = 0; j < grid.row+2; j++) {
                 this.minesArray[i][j] = ''
             } 
         } 
@@ -97,9 +101,9 @@ const mineSweeper = {
     initCheckArray() {
         this.checkArray= []
         // useless ?
-        for (let i = 0; i < grid.gridSize; i++) {
+        for (let i = 0; i < grid.col; i++) {
             this.checkArray[i] = [''];
-            for (let j = 0; j < grid.gridSize; j++) {
+            for (let j = 0; j < grid.row; j++) {
                 this.checkArray[i][j] = ''
             } 
         } 
@@ -110,8 +114,8 @@ const mineSweeper = {
             let col = 0
             let row = 0
             do{ // Generation d'un double index de tab [col][row]
-                col = grid.randomNum()
-                row = grid.randomNum()
+                col = grid.randomNum(grid.col)
+                row = grid.randomNum(grid.row)
             }  // Si déjà une bombe ici, on boucle pour re générer un index aleatoire
                // car on ne peut pas avoir 2 bombes sur la même case
             while(this.minesArray[col][row] === 'bomb')
@@ -126,8 +130,8 @@ const mineSweeper = {
 
     setNbMinesAround(){
         // boucle sur le tableau des pixels
-        for (let i = 0; i < grid.gridSize; i++) {
-            for (let j = 0; j < grid.gridSize; j++) {
+        for (let i = 0; i < grid.col; i++) {
+            for (let j = 0; j < grid.row; j++) {
                 /* Pour chaque case, on regarde les 8 cases alentours
                    et on compte le nombre de bombes */                 
                 if (this.minesArray[i][j] === 'bomb'){
@@ -141,7 +145,7 @@ const mineSweeper = {
                     for(let x = i-1; x < i+2; x++ ) {
                         for(let y = j-1; y < j+2; y++ ) {
                             
-                            if(x<0 || y<0 || x> grid.gridSize -1 || y> grid.gridSize -1){
+                            if(x<0 || y<0 || x> grid.col -1 || y> grid.row -1){
                                 // Si x ou j négatif, on est hors du tableau, on ne fait rien
                                 // Si x ou j supérieur à la taille d'un côté du
                                 // tableau, on est hors du tableau, on ne fait rien
@@ -186,7 +190,7 @@ const mineSweeper = {
         for(let x = i-1; x < i+2; x++ ) {
             for(let y = j-1; y < j+2; y++ ) {
                 
-                if(x<0 || y<0 || x> grid.gridSize -1 || y> grid.gridSize -1){
+                if(x<0 || y<0 || x> grid.col -1 || y> grid.row -1){
                     // Si x ou j négatif ou x,j supérieur à la taille d'un côté du tab =>
                     //  on est hors du tableau, on ne fait rien
                 } else{  

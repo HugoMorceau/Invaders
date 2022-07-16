@@ -25,6 +25,7 @@ const app = {
         // DEBUG END
         if(app.firsInit){
             app.initModesMenu();
+            app.listenForm();
             invaders.initColorPalette();
         }
         app.reset();
@@ -105,6 +106,9 @@ const app = {
             navTop.appendChild(modeBtn)
             modeBtn.addEventListener('click', app.setMode);
         }); 
+        // on ajoute le listener sur l'emoji win / loose
+        document.getElementById('emojiWin').addEventListener('click', app.setMode);
+
     },
     animateBtn(btn){
         const divSlide = document.createElement('div')
@@ -143,9 +147,14 @@ const app = {
                 grid.col = 4;
                 pixel.pixelSize = '60px';   
                 break;
-            default:
-                grid.row = 10;
+            case  'tetris':
+                grid.row = 22;
                 grid.col = 10;
+                pixel.pixelSize = '25px';   
+                break;
+            default:
+                grid.row = grid.defaultSize;
+                grid.col = grid.defaultSize;
                 pixel.pixelSize = pixel.defaultPixelSize
                 console.log('mode de jeu par défaut')
         }
@@ -159,7 +168,11 @@ const app = {
         }
         
     },
-
+    listenForm(){
+        // btn valid tailles pixels et grille
+        const configBtn = document.getElementById('configBtn');
+        configBtn.addEventListener('click', app.configClick);
+    },
     // Clique sur Validation tailles pixels et grille
     configClick(event) {
         event.preventDefault();
@@ -167,18 +180,21 @@ const app = {
         const pixelSizeInput = document.getElementById('pixelSize').value
         const gridColsInput = document.getElementById('gridCols').value
         const gridRowsInput = document.getElementById('gridRows').value
+     
         if(app.currentMode === "mineSweeper" && mineSweeper.difficulty === 'customDiff'){
             mineSweeper.nbOfMines = document.getElementById('nbOfMines').value
         }
-        if (pixelSizeInput === '' || pixelSizeInput  === 0|| gridColsInput === '' || gridColsInput === 0 || gridRowsInput === '' || gridRowsInput === 0)  {
-            console.log('Les tailles de grille ou pixel vide(s) ou = 0, valeur par default sélectionée');
-            app.init();
-        } else {
-            grid.row = gridRowsInput
-            grid.col = gridColsInput
+
+        if (pixelSizeInput !== '' && pixelSizeInput > 0) {
             pixel.pixelSize = pixelSizeInput + 'px';
-            app.init();
         }
+        if( gridColsInput !== '' || gridColsInput > 0 ){
+            grid.col = gridColsInput
+        }
+        if(gridRowsInput!== '' || gridRowsInput> 0)  {
+            grid.row = gridRowsInput
+        } 
+        app.init();
     },
     transpose(matrix) {
         return matrix[0].map((col, i) => matrix.map(row => row[i]));

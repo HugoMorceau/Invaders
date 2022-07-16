@@ -1,7 +1,12 @@
 
-
 const tetris = {
-    
+    intervalId:0,
+    iamAlive: true,
+    resetRequired: false,
+    delay: 500,
+    previousTetro: '',
+    currentTetro: '',
+
     tetrominoes: {
         tetroZ: [[1,0],[1,1],[0,1]],
         tetroS: [[0,1],[1,1],[1,0]],
@@ -17,10 +22,38 @@ const tetris = {
     },
 
     init(){
-        
-    },
 
-    Play(){
+        tetris.intervalId = setInterval(tetris.play, tetris.delay)
+    },
+    play(){   
+        // Si pas de piece courante
+        //  gènere une nouvelle pièce aléatoire 
+        //  desinne la pièce sur la grille
+        //Sinon
+        // efface la pièce courante
+        // faire descendre la pièce courante d'une ligne
+        if(this.currentTetro === ''){
+            do{
+                this.currentTetro = this.generateTetromino()
+
+            } while(tetris.currentTetro = tetris.previousTetro)
+        }
+        if(!tetris.iamAlive || tetris.resetRequired){
+            clearInterval(tetris.intervalId)
+            if(!tetris.iamAlive){
+                alert('you lose')
+            }
+        }
+    },
+    generateTetromino(){
+        randNB = grid.randomNum(tetris.tetrominoes.length)
+        for (const key in object) {
+            if (Object.hasOwnProperty.call(object, key)) {
+                const element = object[key];
+                
+            }
+        }
+        this.currentTetro = tetris.tetrominoes
     },
 
     rotate(tetromino){

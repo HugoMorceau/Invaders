@@ -8,11 +8,7 @@ const invaders = {
         'red'],
 
     colorPalette:'',
-    flipMajorDiagonal(matrix) {
-        return matrix[0].map((column, index) => (
-            matrix.map(row => row[index])
-          ))
-      },
+
       
     init(){
         app.currentMode = 'invaders'
@@ -24,7 +20,6 @@ const invaders = {
     },
 
     resetInvaders(){
-        /* app.bottomMenu.removeChild(this.colorPalette)*/
         this.colorPalette.classList.add('hide')
         document.querySelector('.config').classList.add('hide')
         document.getElementById('clearBtn').classList.add('hide');
@@ -51,7 +46,7 @@ const invaders = {
     listenInvaders(){
         this.listenColorPalette();
         this.listenClear();
-        this.listenForm();
+        // app.listenForm();
     },
     listenClear(){
         //btn clear
@@ -59,15 +54,9 @@ const invaders = {
         clearBtn.addEventListener('click', function(){
             const saveColor = pixel.pixelDrawColor
             pixel.pixelDrawColor = 'lightgrey'
-            grid.drawGrid();
+            grid.draw();
             pixel.pixelDrawColor = saveColor
         }); 
-        // clearBtn.addEventListener('click', grid.drawGrid);
-    },
-    listenForm(){
-        // btn valid tailles pixels et grille
-        const configBtn = document.getElementById('configBtn');
-        configBtn.addEventListener('click', app.configClick);
     },
                 
     listenColorPalette(){

@@ -51,8 +51,8 @@ const snake = {
         this.snakeSize = this.defaultSnakeSize
         app.initEmojiWin();
         this.listenKeyboard()
-        let col = Math.round(grid.gridSize/2) 
-        let row = Math.floor(grid.gridSize/2) 
+        let col = Math.round(grid.col/2) 
+        let row = Math.floor(grid.row/2) 
         let i = 0
         while(i < this.snakeSize){
             this.drawSnake(col,row)
@@ -107,11 +107,11 @@ const snake = {
     goThroughWall(){
         if(this.direction === 'up' || this.direction === 'down'){
             if (this.nextPosRow < 0){
-                this.nextPosRow = grid.gridSize -1
+                this.nextPosRow = grid.row -1
             }else {this.nextPosRow = 0}
         }else{
             if (this.nextPosCol < 0){
-                this.nextPosCol = grid.gridSize -1 
+                this.nextPosCol = grid.col -1 
             }else {this.nextPosCol= 0}
         }
         snake.nextPosition = pixel.pixelsArray[this.nextPosCol][this.nextPosRow]
@@ -199,8 +199,8 @@ const snake = {
         let i = 0;
         do{
             i++
-            col = grid.randomNum()
-            row = grid.randomNum() 
+            col = grid.randomNum(grid.col)
+            row = grid.randomNum(grid.row) 
             this.ratPos = [col,row]
             ratPix = pixel.pixelsArray[col][row]
          } while(this.whatIsThisPix(ratPix) != 'free')

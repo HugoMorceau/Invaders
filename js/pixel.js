@@ -1,5 +1,5 @@
 const pixel = {
-    defaultPixelSize: '30px',
+    defaultPixelSize: '10px',
     pixelSize: '0px',
     defaultPixelDrawColor: 'lightgrey',
     pixelDrawColor: 'lightgrey',
