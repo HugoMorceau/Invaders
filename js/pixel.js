@@ -17,14 +17,13 @@ const pixel = {
         document.getElementById('grid').style.pointerEvents = 'auto' ;
     },
     initPixelsArray() {
-        this.pixelsArray = [];
-        // useless ?
-        for (let i = 0; i < grid.gridSize; i++) {
+        this.pixelsArray = []
+        for (let i = 0; i < grid.col; i++) {
             this.pixelsArray[i] = [''];
-            for (let j = 0; j < grid.gridSize; j++) {
+            for (let j = 0; j < grid.row; j++) {
                 this.pixelsArray[i][j] = ''
             }
-        }
+        } 
     },
     drawPixel() {
         const pixelDiv = document.createElement('div')
@@ -86,7 +85,7 @@ const pixel = {
             mineSweeper.initCheckArray();
             mineSweeper.revealAround(indexIJ);
         }
-        if(mineSweeper.revealed == grid.gridSize * grid.gridSize - mineSweeper.nbOfMines ){
+        if(mineSweeper.revealed == grid.size - mineSweeper.nbOfMines ){
             console.log("YOU WIN !!!!")
             document.getElementById('grid').style.pointerEvents = 'none' ;
             document.getElementById("emojiWin").classList.add('happy')

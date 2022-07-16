@@ -1,19 +1,36 @@
 
 
 const tetris = {
-    // j et s a ajouter
+    
     tetrominoes: {
         tetroZ: [[1,0],[1,1],[0,1]],
+        tetroS: [[0,1],[1,1],[1,0]],
         tetroL: [[1,1],[1,0],[1,0]],
-        tetroI: [[0,1],[0,1],[0,1],[0,1]],
+        tetroJ: [[1,0],[1,0],[1,1]],
+        // tetroI: [[1,0],[1,0],[1,0],[1,0]],
+        tetroI: [[1],[1],[1],[1]],
         tetroT: [[1,0],[1,1],[1,0]],
         tetroO: [[1,1],[1,1]],
     },
+
+    reset(){
+    },
+
+    init(){
+        
+    },
+
+    Play(){
+    },
+
     rotate(tetromino){
         app.transpose(tetromino.reverse())
     } ,
-   
-    init(){
+
+
+
+    // To be removed
+    drawAllTetrominoes(){ // just for testing
         let rowDraw = 0
         for (const tetromino in this.tetrominoes) {
             tetrotemp = this.tetrominoes[tetromino]
@@ -38,14 +55,8 @@ const tetris = {
             }
             rowDraw +=5
         }
-    console.log(this.tetroZ)
-
-        this.Play()
+         console.log(this.tetroZ)
 
     },
-    reset(){
-    },
-
-    Play(){
-    },
+   
 }

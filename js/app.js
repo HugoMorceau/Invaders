@@ -118,28 +118,6 @@ const app = {
         console.log("animation du bouton : " + btn)
     },
 
-    // method listenEvents remplacée par l'ajout de l'event directement à la création des boutons dans initModesMenu()
-  /*   listenEvents(){
-        // A FAIRE :  Automatiser la création des ecouteurs via le tableau des modes  
-        // btn demineur
-        const msBtn = document.getElementById('mineSweeperBtn');
-        msBtn.addEventListener('click', app.setMode);
-        // btn invaders
-        const invadersBtn = document.getElementById('invadersBtn');
-        invadersBtn.addEventListener('click', app.setMode);
-        // btn Snake 
-        const snakeBtn = document.getElementById('snakeBtn');
-        snakeBtn.addEventListener('click', app.setMode)     
-        // btn 2048
-        const g2048Btn = document.getElementById('2048Btn');
-        g2048Btn.addEventListener('click', app.setMode)     
-        // btn tetris
-        const tetrisBtn = document.getElementById('tetrisBtn');
-        g2048Btn.addEventListener('click', app.setMode)    
-        //btn win or loose
-        const winLoseBtn = document.getElementById('emojiWin')
-        winLoseBtn.addEventListener('click', app.setMode); // Temporaire => A améliorer directement dans setMode ?
-    }, */
     setMode(evt){
         app.previousMode = app.currentMode
         if(typeof evt != 'undefined'){
@@ -151,7 +129,8 @@ const app = {
         }
         switch(app.currentMode){
             case  'snake':
-                grid.gridSize = 30;
+                grid.row = 20;
+                grid.col = 30;
                 pixel.pixelSize = '10px';
                 break;
             case  'mineSweeper':
@@ -160,11 +139,13 @@ const app = {
                 mineSweeper.setDifficulty(mineSweeper.difficulty);
                 break;
             case  '2048':
-                grid.gridSize = 4;
+                grid.row = 4;
+                grid.col = 4;
                 pixel.pixelSize = '60px';   
                 break;
             default:
-                grid.gridSize = grid.defaultGridSize
+                grid.row = 10;
+                grid.col = 10;
                 pixel.pixelSize = pixel.defaultPixelSize
                 console.log('mode de jeu par défaut')
         }
@@ -184,15 +165,17 @@ const app = {
         event.preventDefault();
         app.gameModeSelected = true;
         const pixelSizeInput = document.getElementById('pixelSize').value
-        const gridSizeInput = document.getElementById('gridSize').value
+        const gridColsInput = document.getElementById('gridCols').value
+        const gridRowsInput = document.getElementById('gridRows').value
         if(app.currentMode === "mineSweeper" && mineSweeper.difficulty === 'customDiff'){
             mineSweeper.nbOfMines = document.getElementById('nbOfMines').value
         }
-        if (pixelSizeInput === '', 0 || gridSizeInput === '', 0)  {
+        if (pixelSizeInput === '' || pixelSizeInput  === 0|| gridColsInput === '' || gridColsInput === 0 || gridRowsInput === '' || gridRowsInput === 0)  {
             console.log('Les tailles de grille ou pixel vide(s) ou = 0, valeur par default sélectionée');
             app.init();
         } else {
-            grid.gridSize = gridSizeInput;
+            grid.row = gridRowsInput
+            grid.col = gridColsInput
             pixel.pixelSize = pixelSizeInput + 'px';
             app.init();
         }
