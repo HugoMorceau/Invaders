@@ -162,6 +162,13 @@ body {
 
 }
 
+.pixel--tetris{
+
+}
+.pixel--tetris-active{
+    
+}
+
 .pixel--snakeMode{
     border: none;
 }
