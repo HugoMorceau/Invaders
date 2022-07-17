@@ -39,8 +39,8 @@ const tetris = {
                 this.currentTetro = this.generateTetromino()
 
             } while(tetris.currentTetro === tetris.previousTetro)
-            this.currentTetroPattern = this.tetrominoes.currentTetro
-            this.drawTetromino(this.currentTetroPattern, grid.col/2 - this.currentTetroPattern.length / 2 ,0)
+            this.currentTetroPattern = this.tetrominoes[this.currentTetro]
+            this.drawTetromino(this.currentTetroPattern, Math.floor(grid.col/2 - this.currentTetroPattern.length / 2),0)
         }
 
         if(!tetris.iamAlive || tetris.resetRequired){
@@ -50,13 +50,15 @@ const tetris = {
             }
         }
     },
-    drawTetromino(pattern, col, row){
-            for (col; col < 4; col++) {
-                for (row; row < 5; row++) {
+    drawTetromino(pattern, coldraw, rowdraw){
+        console.log(pattern)
+            for (let col = 0; col < 4; col++) {
+                for (let row=0; row < 5; row++) {
                 // console.log('TetroZ col' +col + ' Row ' + row  + ' Valeur =' + this.tetroZ[col][row] )
                     try {
+                        console.log(pattern[col][row])
                         if(pattern[col][row]){
-                            pixel.pixelsArray[colDraw + col][rowDraw + row].classList.add('red')
+                            pixel.pixelsArray[coldraw + col][rowdraw +row].classList.add('red')
                         }    
                     } catch (error) {   
                     }
@@ -67,12 +69,19 @@ const tetris = {
 
     },
     generateTetromino(){
-        randNB = grid.randomNum(Object.keys(tetris.tetrominoes).length
-        )
+        randNB = grid.randomNum(Object.keys(tetris.tetrominoes).length)
+        console.log(randNB)
+        let i = 0
         for (const tetromino in this.tetrominoes) {
-            return tetromino
+            if(i===randNB){
+                return this.currentTetro = tetromino
+                //this.currentTetroPattern = tetris.tetrominoes[tetromino]
+                console.log (this.currentTetro)
+                console.log(this.currentTetroPattern)
+                break;
+            }
+            i++
         }
-        this.currentTetro = tetris.tetrominoes
     },
 
     rotate(tetromino){
