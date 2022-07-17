@@ -3,7 +3,7 @@ const tetris = {
     intervalId:0,
     iamAlive: true,
     resetRequired: false,
-    delay: 500,
+    delay: 250,
     previousTetro: '',
     activeTetro: '',
     activeTetroPattern : '',
@@ -22,6 +22,8 @@ const tetris = {
     },
 
     reset(){
+        clearInterval(tetris.intervalId)
+
     },
 
     init(){
@@ -40,7 +42,7 @@ const tetris = {
             this.activeTetroPattern = this.tetrominoes[this.activeTetro]
             this.drawTetromino(this.activeTetroPattern, Math.floor(grid.col/2 - this.activeTetroPattern.length / 2),5)
         } else{
-
+            this.moveTetromino('down') 
         }
 
         if(!tetris.iamAlive || tetris.resetRequired){
@@ -91,7 +93,24 @@ const tetris = {
             }
          }
          if(direction === 'down'){
-             
+            let isFree = true
+            for (let i = 0; i < tetris.activeTetroPattern.length; i++) {
+                let row = this.activeTetroRow + 1 + tetris.activeTetroPattern[0].length
+                attrFree = pixel.pixelsArray[tetris.activeTetroCol][row].getAttribute('isFree')
+                if(!attrFree){
+                    isFree = false
+                }
+            }
+            if(isFree && tetris.activeTetroRow + tetris.activeTetroPattern[0].length < grid.row){
+                tetris.activeTetroRow ++
+                tetris.eraseTetromino()
+                tetris.drawTetromino(tetris.activeTetroPattern, tetris.activeTetroCol, tetris.activeTetroRow) 
+            } else {
+                tetris.activeTetro = ''
+                tetris.activeTetroCol = 0
+                tetris.activeTetroRow = 0
+                this.freezeTetromino()
+            }
          }
     },
     generateTetromino(){
@@ -109,20 +128,36 @@ const tetris = {
     rotate(tetromino){
         // Rotate
         tetromino = app.transpose(tetromino.reverse())
-        tetris.activeTetroPattern = tetromino
-        // Redraw new position
-        tetris.eraseTetromino()
+    
+
+        if (tetris.activeTetroCol + tetromino.length  > grid.col || tetris.activeTetroCol < 0 ){
+            console.log('rotation impossible, hors limite grille')
+        } else {
+                 // Redraw new position
         if(tetris.activeTetro === 'tetroI') {
             if(typeof tetris.activeTetroPattern[0][1] === 'undefined'){
-                tetris.activeTetroCol --
-            } else {
                 tetris.activeTetroCol ++
+            } else {
+                tetris.activeTetroCol --
             }
         }
-        tetris.drawTetromino(tetris.activeTetroPattern, tetris.activeTetroCol, tetris.activeTetroRow)  
+            tetris.eraseTetromino()
+            tetris.activeTetroPattern = tetromino
+            console.log('array de tetris : ')
+            console.log(tetris.activeTetroPattern)
+            console.log('array du slice : ')
+            console.log(tetromino)
+            tetris.drawTetromino(tetris.activeTetroPattern, tetris.activeTetroCol, tetris.activeTetroRow)  
+        }
     },
 
-
+    freezeTetromino(){
+        document.querySelectorAll('.tetris--active').forEach(function(pixelDiv) {
+            pixelDiv.classList.remove('red', 'tetris--active')
+            pixelDiv.classList.add('orange')
+            pixelDiv.setAttribute('isFree', 'false')
+        })
+    },
     eraseTetromino(){
         document.querySelectorAll('.tetris--active').forEach(function(pixelDiv) {
             pixelDiv.classList.remove('red', 'tetris--active')
@@ -139,7 +174,7 @@ const tetris = {
             event.preventDefault()
             const direction = event.code.split('Arrow')
             if(direction[1].toLowerCase() === 'up'){
-                tetris.rotate(tetris.activeTetroPattern)
+                tetris.rotate(tetris.activeTetroPattern.slice())
             } else {
                 tetris.moveTetromino(direction[1].toLowerCase())
             }

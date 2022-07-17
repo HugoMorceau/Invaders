@@ -46,6 +46,11 @@ const pixel = {
         if(app.currentMode === '2048'){
             pixelDiv.classList.add('pixel--2048') 
          }
+         if(app.currentMode === 'tetris'){
+            pixelDiv.classList.add('pixel--tetris') 
+            pixelDiv.setAttribute('isFree', 'true')
+
+         }
         return pixelDiv;
     },
     // Gestion clique droit pixel demineur
