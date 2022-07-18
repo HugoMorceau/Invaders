@@ -3,22 +3,31 @@ const tetris = {
     intervalId:0,
     iamAlive: true,
     resetRequired: false,
-    delay: 250,
+    delay: 500,
     previousTetro: '',
     activeTetro: '',
     activeTetroPattern : '',
     activeTetroCol : 0,
     activeTetroRow : 0,
 
+    // tetrominoes, tetrosColors => à factoriser...
     tetrominoes: {
         tetroZ: [[1,0],[1,1],[0,1]],
         tetroS: [[0,1],[1,1],[1,0]],
         tetroL: [[1,1],[1,0],[1,0]],
         tetroJ: [[1,0],[1,0],[1,1]],
-        // tetroI: [[1,0],[1,0],[1,0],[1,0]],
         tetroI: [[1],[1],[1],[1]],
         tetroT: [[1,0],[1,1],[1,0]],
         tetroO: [[1,1],[1,1]],
+    },
+    tetrosColors:{
+        tetroZ: 'red',
+        tetroS: 'green',
+        tetroL: 'tetris-blue',
+        tetroJ: 'orange',
+        tetroI: 'tetris-cyan',
+        tetroT: 'tetris-darkGreen',
+        tetroO: 'lightOrange',
     },
 
     reset(){
@@ -34,13 +43,14 @@ const tetris = {
     play(){   
 
         if(this.activeTetro === ''){
-            let activeCol, activeRow = 0;
             do{
                 this.activeTetro = this.generateTetromino()
 
             } while(tetris.activeTetro === tetris.previousTetro)
             this.activeTetroPattern = this.tetrominoes[this.activeTetro]
-            this.drawTetromino(this.activeTetroPattern, Math.floor(grid.col/2 - this.activeTetroPattern.length / 2),5)
+            this.activeColor = this.tetrosColors[this.activeTetro]
+            this.drawTetromino(this.activeTetroPattern, Math.floor(grid.col/2 - this.activeTetroPattern.length / 2),0)
+            console.log(tetris.activeColor)
         } else{
             this.moveTetromino('down') 
         }
@@ -52,16 +62,38 @@ const tetris = {
             }
         }
     },
+    isPositionFree(pattern, colDraw, rowDraw){
+        for (let col = 0; col < 4; col++) {
+            for (let row=0; row < 5; row++) {
+                try {
+                    if(pattern[col][row]){
+                        try{
+                            if(pixel.pixelsArray[colDraw + col][rowDraw +row].getAttribute('isFree') === 'false'){
+                                return false;
+                            }
+                        }
+                        catch(error){
+                            console.log(error)
+                            console.log('error catched : tentative accès hors limite de la grille : ')
+                            console.log('colDraw:' + colDraw + ' col:' +col + ' row:Draw' + rowDraw + ' row:' + row )
+                            return false;
+                        }
+                    }    
+                } catch (error) {   
+                    console.log('error catched : tentative accès hors limite du pattern => normal')
+                }
+            }
+        }
+        return true;
+    },
     drawTetromino(pattern, colDraw, rowDraw){
-        console.log(pattern)
         tetris.activeTetroCol = colDraw
         tetris.activeTetroRow = rowDraw
             for (let col = 0; col < 4; col++) {
                 for (let row=0; row < 5; row++) {
                     try {
-                        console.log(pattern[col][row])
                         if(pattern[col][row]){
-                            pixel.pixelsArray[colDraw + col][rowDraw +row].classList.add('red', 'tetris--active')
+                            pixel.pixelsArray[colDraw + col][rowDraw +row].classList.add('tetris--active', tetris.activeColor)
                         }    
                     } catch (error) {   
                     }
@@ -93,15 +125,9 @@ const tetris = {
             }
          }
          if(direction === 'down'){
-            let isFree = true
-            for (let i = 0; i < tetris.activeTetroPattern.length; i++) {
-                let row = this.activeTetroRow + 1 + tetris.activeTetroPattern[0].length
-                attrFree = pixel.pixelsArray[tetris.activeTetroCol][row].getAttribute('isFree')
-                if(!attrFree){
-                    isFree = false
-                }
-            }
-            if(isFree && tetris.activeTetroRow + tetris.activeTetroPattern[0].length < grid.row){
+            const tempPattern = tetris.activeTetroPattern.slice()
+            const isFree = this.isPositionFree(tempPattern,this.activeTetroCol,this.activeTetroRow + 1 )
+            if(isFree ){ //&& tetris.activeTetroRow + tetris.activeTetroPattern[0].length < grid.row
                 tetris.activeTetroRow ++
                 tetris.eraseTetromino()
                 tetris.drawTetromino(tetris.activeTetroPattern, tetris.activeTetroCol, tetris.activeTetroRow) 
@@ -109,13 +135,12 @@ const tetris = {
                 tetris.activeTetro = ''
                 tetris.activeTetroCol = 0
                 tetris.activeTetroRow = 0
-                this.freezeTetromino()
+                tetris.freezeTetromino()
             }
          }
     },
     generateTetromino(){
         randNB = grid.randomNum(Object.keys(tetris.tetrominoes).length)
-        console.log(randNB)
         let i = 0
         for (const tetromino in this.tetrominoes) {
             if(i===randNB){
@@ -128,39 +153,42 @@ const tetris = {
     rotate(tetromino){
         // Rotate
         tetromino = app.transpose(tetromino.reverse())
-    
-
-        if (tetris.activeTetroCol + tetromino.length  > grid.col || tetris.activeTetroCol < 0 ){
+        // if (tetris.activeTetroCol + tetromino.length  > grid.col || tetris.activeTetroCol < 0 ){
+        if(!this.isPositionFree(tetromino,this.activeTetroCol,this.activeTetroRow)){ 
             console.log('rotation impossible, hors limite grille')
         } else {
-                 // Redraw new position
-        if(tetris.activeTetro === 'tetroI') {
-            if(typeof tetris.activeTetroPattern[0][1] === 'undefined'){
-                tetris.activeTetroCol ++
-            } else {
-                tetris.activeTetroCol --
+            // Redraw new position
+            if(tetris.activeTetro === 'tetroI') {
+                if(typeof tetris.activeTetroPattern[0][1] === 'undefined'){
+                    tetris.activeTetroCol ++
+                } else {
+                    tetris.activeTetroCol --
+                }
             }
-        }
             tetris.eraseTetromino()
             tetris.activeTetroPattern = tetromino
-            console.log('array de tetris : ')
-            console.log(tetris.activeTetroPattern)
-            console.log('array du slice : ')
-            console.log(tetromino)
             tetris.drawTetromino(tetris.activeTetroPattern, tetris.activeTetroCol, tetris.activeTetroRow)  
         }
     },
 
     freezeTetromino(){
         document.querySelectorAll('.tetris--active').forEach(function(pixelDiv) {
-            pixelDiv.classList.remove('red', 'tetris--active')
-            pixelDiv.classList.add('orange')
+            pixelDiv.classList.remove(tetris.activeColor, 'tetris--active')
+            pixelDiv.classList.add('darkgrey')
             pixelDiv.setAttribute('isFree', 'false')
         })
+        // check si un tetromino touche le haut de la grille
+        for(let i = 0; i < grid.col; i++){
+             if(pixel.pixelsArray[i][0].getAttribute('isFree')=== 'false') {
+                tetris.iamAlive = false
+                clearInterval(tetris.intervalId)
+             }
+        }
+
     },
     eraseTetromino(){
         document.querySelectorAll('.tetris--active').forEach(function(pixelDiv) {
-            pixelDiv.classList.remove('red', 'tetris--active')
+            pixelDiv.classList.remove(tetris.activeColor, 'tetris--active')
         })
     },
 

@@ -163,7 +163,7 @@ body {
 }
 
 .pixel--tetris{
-    border: none;
+   /* border: none;*/
 
 }
 .pixel--tetris-active{
@@ -244,7 +244,9 @@ body {
 .orange {
     background-color: #E3B341;
 }
-
+.lightOrange{
+    background-color: #f59563;
+}
 .green {
     background-color: #3FB950;
 }
@@ -271,6 +273,16 @@ body {
 }
 .darkGreen {
     color: #036900;
+}
+
+.tetris-darkGreen {
+    background-color: #036900;
+}
+.tetris-blue {
+    background-color: #4141e3;
+}
+.tetris-cyan {
+    background-color: #00b1b1;
 }
 
 .hide{
