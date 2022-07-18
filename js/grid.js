@@ -39,6 +39,7 @@ const grid = {
     drawPixelsColumn(columnDiv, indexCol){   
         for (let indexRow = 0; indexRow < grid.row; indexRow++) {   
             const pixelDiv = pixel.drawPixel();
+            pixelDiv.dataset['row'] = indexRow 
             columnDiv.appendChild(pixelDiv);            
             pixel.pixelsArray[indexCol][indexRow] = pixelDiv;
         }

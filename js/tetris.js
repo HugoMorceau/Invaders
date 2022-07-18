@@ -3,6 +3,8 @@ const tetris = {
     intervalId:0,
     iamAlive: true,
     resetRequired: false,
+    defaultDelay: 500,
+    sprintDelay: 35,
     delay: 500,
     previousTetro: '',
     activeTetro: '',
@@ -32,7 +34,6 @@ const tetris = {
 
     reset(){
         clearInterval(tetris.intervalId)
-
     },
 
     init(){
@@ -41,6 +42,24 @@ const tetris = {
         this.listenKeyboard()
     },
     play(){   
+        const rowtest = 5
+        // let test = document.querySelectorAll("[data-row='" + rowtest+"'")
+        /* document.querySelectorAll('[data-row="5"').array.forEach(element => {
+            console.log(element)
+        }); */
+        row = document.querySelectorAll('[data-row="5"')
+        row.forEach(element => {
+            console.log(element)
+            element.classList.add('red')                                             
+        }); 
+        
+        if(!tetris.iamAlive || tetris.resetRequired){
+            clearInterval(tetris.intervalId)
+            if(!tetris.iamAlive){
+                alert('you lose')
+                return
+            }
+        }
 
         if(this.activeTetro === ''){
             do{
@@ -54,13 +73,7 @@ const tetris = {
         } else{
             this.moveTetromino('down') 
         }
-
-        if(!tetris.iamAlive || tetris.resetRequired){
-            clearInterval(tetris.intervalId)
-            if(!tetris.iamAlive){
-                alert('you lose')
-            }
-        }
+   
     },
     isPositionFree(pattern, colDraw, rowDraw){
         for (let col = 0; col < 4; col++) {
@@ -94,6 +107,9 @@ const tetris = {
                     try {
                         if(pattern[col][row]){
                             pixel.pixelsArray[colDraw + col][rowDraw +row].classList.add('tetris--active', tetris.activeColor)
+                            if(pixel.pixelsArray[0][2].classList.length > 3 ){
+                                console.log('break here')
+                            }
                         }    
                     } catch (error) {   
                     }
@@ -135,6 +151,7 @@ const tetris = {
                 tetris.activeTetro = ''
                 tetris.activeTetroCol = 0
                 tetris.activeTetroRow = 0
+                tetris.activeTetroPattern = ''
                 tetris.freezeTetromino()
             }
          }
@@ -172,18 +189,38 @@ const tetris = {
     },
 
     freezeTetromino(){
-        document.querySelectorAll('.tetris--active').forEach(function(pixelDiv) {
-            pixelDiv.classList.remove(tetris.activeColor, 'tetris--active')
-            pixelDiv.classList.add('darkgrey')
-            pixelDiv.setAttribute('isFree', 'false')
-        })
+ 
+        if(tetris.iamAlive){
+            document.querySelectorAll('.tetris--active').forEach(function(pixelDiv) {
+                pixelDiv.classList.remove(tetris.activeColor, 'tetris--active')
+                pixelDiv.classList.add('darkgrey')
+                pixelDiv.setAttribute('isFree', 'false')
+                // clearInterval(tetris.intervalId)
+            })
+        } 
+        // check si une ligne est complète
+        for(let row = 0; row < grid.row; row++){
+            let rowIsComplete = true    
+            for(let col = 0; col < grid.col; col++){
+                if(pixel.pixelsArray[col][row].getAttribute('isFree') === 'true'){
+                    // si une case de la ligne est libre, la ligne n'est pas complète
+                    rowIsComplete = false
+                }
+            }
+            if(rowIsComplete){
+                // la ligne est complète, on la supprime
+                document.querySelectorAll('row:' + row)
+            }
+        }
+        
+
         // check si un tetromino touche le haut de la grille
         for(let i = 0; i < grid.col; i++){
-             if(pixel.pixelsArray[i][0].getAttribute('isFree')=== 'false') {
-                tetris.iamAlive = false
-                clearInterval(tetris.intervalId)
-             }
+        if(pixel.pixelsArray[i][0].getAttribute('isFree')=== 'false') {
+            tetris.iamAlive = false
+            //clearInterval(tetris.intervalId)
         }
+    }
 
     },
     eraseTetromino(){
@@ -195,16 +232,37 @@ const tetris = {
     // EVENTS LISTENERS / HANDLERS
     listenKeyboard(){
         document.addEventListener('keydown', tetris.handleKeyboard)
+        document.addEventListener('keyup', tetris.handleKeyboardReleased)
     },
-    handleKeyboard(event){
-        console.log(event.code)
+    handleKeyboardReleased(event){
         if(event.code.substring(0,5)=== 'Arrow'){
             event.preventDefault()
             const direction = event.code.split('Arrow')
-            if(direction[1].toLowerCase() === 'up'){
-                tetris.rotate(tetris.activeTetroPattern.slice())
-            } else {
-                tetris.moveTetromino(direction[1].toLowerCase())
+            if(direction[1].toLowerCase() === 'down'){
+                clearInterval(tetris.intervalId)
+                if(tetris.iamAlive){
+                    tetris.delay = tetris.defaultDelay
+                    tetris.intervalId = setInterval(tetris.play.bind(tetris), tetris.delay)
+                }
+            }
+        }
+    },
+    handleKeyboard(event){
+        console.log(event.code)
+        if(tetris.iamAlive){
+            if(event.code.substring(0,5)=== 'Arrow'){
+                event.preventDefault()
+                const direction = event.code.split('Arrow')
+                if(direction[1].toLowerCase() === 'down'){
+                    clearInterval(tetris.intervalId)
+                    tetris.delay = tetris.sprintDelay
+                    tetris.intervalId = setInterval(tetris.play.bind(tetris), tetris.delay)
+                }
+                if(direction[1].toLowerCase() === 'up'){
+                    tetris.rotate(tetris.activeTetroPattern.slice())
+                } else {
+                    tetris.moveTetromino(direction[1].toLowerCase())
+                }
             }
         }
     // Gestion des autres touches
