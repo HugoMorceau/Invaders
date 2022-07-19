@@ -164,6 +164,7 @@ body {
 
 .pixel--tetris{
     border: none;
+    background-color: #fbfaf5;
 
 }
 .tetris--active{
@@ -277,18 +278,32 @@ body {
     color: #930000;
 }
 .darkGreen {
-    color: #036900;
+    color: #547f69;
 }
 
-.tetris-darkGreen {
-    background-color: #036900;
+.tetris-z {
+    background-color: #FFADAD ;
 }
-.tetris-blue {
-    background-color: #4141e3;
+.tetris-s {
+    background-color: #bdb2ff
 }
-.tetris-cyan {
-    background-color: #00b1b1;
+.tetris-l {
+    background-color: #FDFFB6 ;
 }
+.tetris-j {
+    background-color: #CAFFBF ;
+}
+.tetris-i {
+    background-color: #9BF6FF;
+}
+.tetris-t {
+    background-color:#A0C4FF ;
+}
+.tetris-o {
+    background-color:#FFC6FF ;
+}
+
+
 
 .hide{
     display: none;

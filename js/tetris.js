@@ -3,7 +3,7 @@ const tetris = {
     intervalId:0,
     iamAlive: true,
     resetRequired: false,
-    defaultDelay: 250,
+    defaultDelay: 400,
     sprintDelay: 35,
     delay: 0,
     previousTetro: '',
@@ -23,13 +23,13 @@ const tetris = {
         tetroO: [[1,1],[1,1]],
     },
     tetrosColors:{
-        tetroZ: 'red',
-        tetroS: 'green',
-        tetroL: 'tetris-blue',
-        tetroJ: 'orange',
-        tetroI: 'tetris-cyan',
-        tetroT: 'tetris-darkGreen',
-        tetroO: 'lightOrange',
+        tetroZ: 'tetris-z',
+        tetroS: 'tetris-s',
+        tetroL: 'tetris-l',
+        tetroJ: 'tetris-j',
+        tetroI: 'tetris-i',
+        tetroT: 'tetris-t',
+        tetroO: 'tetris-o',
     },
 
     reset(){
@@ -162,23 +162,25 @@ const tetris = {
     },
 
     rotate(tetromino){
-        // Rotate
-        tetromino = app.transpose(tetromino.reverse())
-        
-        if(!this.isPositionFree(tetromino,this.activeTetroCol,this.activeTetroRow)){ 
-            console.log('rotation impossible, hors limite grille')
-        } else {
-            // Redraw new position
-            if(tetris.activeTetro === 'tetroI') {
-                if(typeof tetris.activeTetroPattern[0][1] === 'undefined'){
-                    tetris.activeTetroCol ++
-                } else {
-                    tetris.activeTetroCol --
+        if (tetromino != ''){
+            // Rotate
+            tetromino = app.transpose(tetromino.reverse())
+            
+            if(!this.isPositionFree(tetromino,this.activeTetroCol,this.activeTetroRow)){ 
+                console.log('rotation impossible, hors limite grille')
+            } else {
+                // Redraw new position
+                if(tetris.activeTetro === 'tetroI') {
+                    if(typeof tetris.activeTetroPattern[0][1] === 'undefined'){
+                        tetris.activeTetroCol ++
+                    } else {
+                        tetris.activeTetroCol --
+                    }
                 }
+                tetris.eraseTetromino()
+                tetris.activeTetroPattern = tetromino
+                tetris.drawTetromino(tetris.activeTetroPattern, tetris.activeTetroCol, tetris.activeTetroRow)  
             }
-            tetris.eraseTetromino()
-            tetris.activeTetroPattern = tetromino
-            tetris.drawTetromino(tetris.activeTetroPattern, tetris.activeTetroCol, tetris.activeTetroRow)  
         }
     },
 

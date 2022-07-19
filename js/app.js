@@ -151,6 +151,7 @@ const app = {
                 grid.row = 22;
                 grid.col = 10;
                 pixel.pixelSize = '25px';   
+                pixel.pixelDrawColor = 'white'
                 break;
             default:
                 grid.row = grid.defaultSize;
