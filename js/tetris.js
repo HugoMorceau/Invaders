@@ -3,15 +3,14 @@ const tetris = {
     intervalId:0,
     iamAlive: true,
     resetRequired: false,
-    defaultDelay: 500,
+    defaultDelay: 250,
     sprintDelay: 35,
-    delay: 500,
+    delay: 0,
     previousTetro: '',
     activeTetro: '',
     activeTetroPattern : '',
     activeTetroCol : 0,
     activeTetroRow : 0,
-    // defaultPixel = pixel.pixelDiv,
 
     // tetrominoes, tetrosColors => à factoriser...
     tetrominoes: {
@@ -38,6 +37,7 @@ const tetris = {
     },
 
     init(){
+        tetris.delay = tetris.defaultDelay
         this.activeTetro = ''
         tetris.intervalId = setInterval(tetris.play.bind(this), tetris.delay)
         this.listenKeyboard()
@@ -50,24 +50,30 @@ const tetris = {
                 return
             }
         }
-
+        // Si pas de tétromino actif, on en génère un nouveau aléatoire
         if(this.activeTetro === ''){
-            do{
-                this.activeTetro = this.generateTetromino()
-
-            } while(tetris.activeTetro === tetris.previousTetro)
+            do{ // génère un tetromino au hasard
+                this.activeTetro = this.generateTetromino()  
+            } while(tetris.activeTetro === tetris.previousTetro) // on ne veut pas 2 fois de suite le même tetromino
+            tetris.previousTetro = tetris.activeTetro
+            // Récupère les infos (dessin et couleurs) du tétromino
             this.activeTetroPattern = this.tetrominoes[this.activeTetro]
             this.activeColor = this.tetrosColors[this.activeTetro]
+            // Dessine le nouveau tétromino sur la première ligne (0) et au centre (largeur de grille /2 - largeur tetro /2)
             this.drawTetromino(this.activeTetroPattern, Math.floor(grid.col/2 - this.activeTetroPattern.length / 2),0)
-            console.log(tetris.activeColor)
         } else{
             this.moveTetromino('down') 
         }
    
     },
+    // Vérifie si un dessin (pattern) peut être tracé à la position indiqué (colDraw, rowDraw)
+    // Si une seule zone de l'espace nécessaire au dessin est occupé par un autre tétromino ou hors de la grille, renvoi false,
+    // Renvoi true si le dessin peut être réalisé
     isPositionFree(pattern, colDraw, rowDraw){
-        for (let col = 0; col < 4; col++) {
-            for (let row=0; row < 5; row++) {
+        // for (let col = 0; col < 4; col++) {
+        for (let col = 0; col < pattern.length; col++) {
+            // for (let row=0; row < 5; row++) {
+            for (let row=0; row < pattern[0].length; row++) {
                 try {
                     if(pattern[col][row]){
                         try{
@@ -108,32 +114,30 @@ const tetris = {
     },
     moveTetromino(direction){
         if(direction === 'up'){
-            // tetris.eraseTetromino()
-         }
-         if(direction === 'left'){   
-             
-             if(tetris.activeTetroCol > 0){
+            tetris.rotate(tetris.activeTetroPattern.slice())
+         }     
+         if(direction === 'left'){
+            let tempPattern = tetris.activeTetroPattern.slice()
+            let isFree = this.isPositionFree(tempPattern,this.activeTetroCol -1, this.activeTetroRow)
+            if(isFree){
                 tetris.activeTetroCol --
                 tetris.eraseTetromino()
-                tetris.drawTetromino(tetris.activeTetroPattern, tetris.activeTetroCol, tetris.activeTetroRow)
-            } else{
-                tetris.activeTetroCol ++
+                tetris.drawTetromino(tetris.activeTetroPattern,this.activeTetroCol, this.activeTetroRow)
             }
          }
          if(direction === 'right'){
-            
-            if(tetris.activeTetroCol + this.activeTetroPattern.length  < grid.col){
+            let tempPattern = tetris.activeTetroPattern.slice()
+            let isFree = this.isPositionFree(tempPattern,this.activeTetroCol +1, this.activeTetroRow)
+            if(isFree){
                 tetris.activeTetroCol ++
                 tetris.eraseTetromino()
-                tetris.drawTetromino(tetris.activeTetroPattern, tetris.activeTetroCol, tetris.activeTetroRow)  
-            } else{
-                tetris.activeTetroCol -- 
+                tetris.drawTetromino(tetris.activeTetroPattern,this.activeTetroCol, this.activeTetroRow)
             }
          }
          if(direction === 'down'){
-            const tempPattern = tetris.activeTetroPattern.slice()
-            const isFree = this.isPositionFree(tempPattern,this.activeTetroCol,this.activeTetroRow + 1 )
-            if(isFree ){ //&& tetris.activeTetroRow + tetris.activeTetroPattern[0].length < grid.row
+            let tempPattern = tetris.activeTetroPattern.slice()
+            let isFree = this.isPositionFree(tempPattern,this.activeTetroCol,this.activeTetroRow + 1 )
+            if(isFree ){
                 tetris.activeTetroRow ++
                 tetris.eraseTetromino()
                 tetris.drawTetromino(tetris.activeTetroPattern, tetris.activeTetroCol, tetris.activeTetroRow) 
@@ -160,7 +164,7 @@ const tetris = {
     rotate(tetromino){
         // Rotate
         tetromino = app.transpose(tetromino.reverse())
-        // if (tetris.activeTetroCol + tetromino.length  > grid.col || tetris.activeTetroCol < 0 ){
+        
         if(!this.isPositionFree(tetromino,this.activeTetroCol,this.activeTetroRow)){ 
             console.log('rotation impossible, hors limite grille')
         } else {
@@ -182,8 +186,9 @@ const tetris = {
  
         if(tetris.iamAlive){
             document.querySelectorAll('.tetris--active').forEach(function(pixelDiv) {
-                pixelDiv.classList.remove(tetris.activeColor, 'tetris--active')
-                pixelDiv.classList.add('darkgrey')
+                // pixelDiv.classList.remove(tetris.activeColor, 'tetris--active')
+                pixelDiv.classList.remove( 'tetris--active')
+                pixelDiv.classList.add('tetris--freezed')
                 pixelDiv.setAttribute('isFree', 'false')
                 // clearInterval(tetris.intervalId)
             })
@@ -198,38 +203,16 @@ const tetris = {
                 }
             }
             if(rowIsComplete){
-                // la ligne est complète, on la supprime
-            /*     document.querySelectorAll('[data-row="'+row+'"').forEach(element => {
-                    element.remove()
-                }); */ 
-            /*     for (let col = 0; col < grid.col; col++) {
-                    pixel.pixelsArray[col].splice(0,1)
-                    
-                } */
                 let col = 0
                 document.querySelectorAll('.column').forEach(column => {
-
                     column.removeChild(column.children[row])
                     let test = pixel.pixelsArray[col][0].cloneNode(true)
-                    test.classList.add('red')
                     column.prepend(test)
-                    // pixel.pixelsArray[col].splice(0,1)
                     pixel.pixelsArray[col] = column.children
-                    // column.prepend(pixel.pixelsArray[col][0].cloneNode(true))
                     col ++
                 });
-
-            /*     let col = 0
-                document.querySelectorAll('[data-row="1"').forEach(element => {
-                    element.parentNode.prepend(pixel.pixelsArray[col][0].cloneNode(true))
-                    element.remove()
-                    // pixel.pixelsArray[col][0].classList.add('red')
-                    
-                    col++
-                }); */
             }
          
-
         }
 
         // check si un tetromino touche le haut de la grille
@@ -276,11 +259,12 @@ const tetris = {
                     tetris.delay = tetris.sprintDelay
                     tetris.intervalId = setInterval(tetris.play.bind(tetris), tetris.delay)
                 }
-                if(direction[1].toLowerCase() === 'up'){
+                tetris.moveTetromino(direction[1].toLowerCase())
+     /*            if(direction[1].toLowerCase() === 'up'){
                     tetris.rotate(tetris.activeTetroPattern.slice())
                 } else {
                     tetris.moveTetromino(direction[1].toLowerCase())
-                }
+                } */
             }
         }
     // Gestion des autres touches

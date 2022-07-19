@@ -163,12 +163,17 @@ body {
 }
 
 .pixel--tetris{
-   /* border: none;*/
+    border: none;
 
 }
-.pixel--tetris-active{
+.tetris--active{
     border: solid #858585 1px;
 }
+.tetris--freezed{
+    border: solid #858585 1px;
+}
+
+
 
 .pixel--snakeMode{
     border: none;
