@@ -4,6 +4,7 @@ const grid = {
     col: 0,
     size: 0,
     gridDiv: document.querySelector('#grid'),
+    savedPix: '',
 
     init() {
         console.log('Début Initialisation grille') // debug
@@ -40,8 +41,10 @@ const grid = {
         for (let indexRow = 0; indexRow < grid.row; indexRow++) {   
             const pixelDiv = pixel.drawPixel();
             pixelDiv.dataset['row'] = indexRow 
-            columnDiv.appendChild(pixelDiv);            
+            columnDiv.appendChild(pixelDiv);   
+            grid.savedPix = pixelDiv         
             pixel.pixelsArray[indexCol][indexRow] = pixelDiv;
         }
+        
     },
 }

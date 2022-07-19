@@ -11,6 +11,7 @@ const tetris = {
     activeTetroPattern : '',
     activeTetroCol : 0,
     activeTetroRow : 0,
+    // defaultPixel = pixel.pixelDiv,
 
     // tetrominoes, tetrosColors => à factoriser...
     tetrominoes: {
@@ -42,17 +43,6 @@ const tetris = {
         this.listenKeyboard()
     },
     play(){   
-        const rowtest = 5
-        // let test = document.querySelectorAll("[data-row='" + rowtest+"'")
-        /* document.querySelectorAll('[data-row="5"').array.forEach(element => {
-            console.log(element)
-        }); */
-        row = document.querySelectorAll('[data-row="5"')
-        row.forEach(element => {
-            console.log(element)
-            element.classList.add('red')                                             
-        }); 
-        
         if(!tetris.iamAlive || tetris.resetRequired){
             clearInterval(tetris.intervalId)
             if(!tetris.iamAlive){
@@ -209,10 +199,38 @@ const tetris = {
             }
             if(rowIsComplete){
                 // la ligne est complète, on la supprime
-                document.querySelectorAll('row:' + row)
+            /*     document.querySelectorAll('[data-row="'+row+'"').forEach(element => {
+                    element.remove()
+                }); */ 
+            /*     for (let col = 0; col < grid.col; col++) {
+                    pixel.pixelsArray[col].splice(0,1)
+                    
+                } */
+                let col = 0
+                document.querySelectorAll('.column').forEach(column => {
+
+                    column.removeChild(column.children[row])
+                    let test = pixel.pixelsArray[col][0].cloneNode(true)
+                    test.classList.add('red')
+                    column.prepend(test)
+                    // pixel.pixelsArray[col].splice(0,1)
+                    pixel.pixelsArray[col] = column.children
+                    // column.prepend(pixel.pixelsArray[col][0].cloneNode(true))
+                    col ++
+                });
+
+            /*     let col = 0
+                document.querySelectorAll('[data-row="1"').forEach(element => {
+                    element.parentNode.prepend(pixel.pixelsArray[col][0].cloneNode(true))
+                    element.remove()
+                    // pixel.pixelsArray[col][0].classList.add('red')
+                    
+                    col++
+                }); */
             }
+         
+
         }
-        
 
         // check si un tetromino touche le haut de la grille
         for(let i = 0; i < grid.col; i++){
