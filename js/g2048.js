@@ -18,7 +18,7 @@ const g2048 = {
         })
     },
     init() {
-         app.currentMode = '2048'
+        app.currentMode = '2048'
         app.initEmojiWin();
         g2048.listenKeyboard()
         g2048.generateNumber()

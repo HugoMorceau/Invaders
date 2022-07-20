@@ -34,9 +34,25 @@ const tetris = {
 
     reset(){
         clearInterval(tetris.intervalId)
+        tetris.resetRequired = true;
+
+        document.removeEventListener('keydown', tetris.handleKeyboard)
+        document.removeEventListener('keyup', tetris.handleKeyboardReleased)
+        app.resetEmojiWin();
+        pixel.pixelDrawColor = pixel.defaultPixelDrawColor;
+        document.querySelectorAll('.pixel').forEach(function(elt)
+        {         
+            for (let i = elt.classList.length - 1; i >= 0; i--) {
+                const className = elt.classList[i];
+                if (className.includes('tetris')) {
+                    elt.classList.remove(className);
+                }
+            }                                                           
+        })
     },
 
     init(){
+        tetris.resetRequired = false;
         tetris.delay = tetris.defaultDelay
         this.activeTetro = ''
         tetris.intervalId = setInterval(tetris.play.bind(this), tetris.delay)
@@ -82,14 +98,13 @@ const tetris = {
                             }
                         }
                         catch(error){
-                            console.log(error)
-                            console.log('error catched : tentative accès hors limite de la grille : ')
-                            console.log('colDraw:' + colDraw + ' col:' +col + ' row:Draw' + rowDraw + ' row:' + row )
+                            // error catched : tentative accès hors limite de la grille => normal: '
                             return false;
                         }
                     }    
                 } catch (error) {   
-                    console.log('error catched : tentative accès hors limite du pattern => normal')
+                    // error catched : tentative accès hors limite du pattern => normal'
+                    // Ni true, ni false, cette position ne doit pas être contrôlée 
                 }
             }
         }
@@ -103,9 +118,6 @@ const tetris = {
                     try {
                         if(pattern[col][row]){
                             pixel.pixelsArray[colDraw + col][rowDraw +row].classList.add('tetris--active', tetris.activeColor)
-                            if(pixel.pixelsArray[0][2].classList.length > 3 ){
-                                console.log('break here')
-                            }
                         }    
                     } catch (error) {   
                     }
@@ -216,15 +228,12 @@ const tetris = {
             }
          
         }
-
         // check si un tetromino touche le haut de la grille
         for(let i = 0; i < grid.col; i++){
         if(pixel.pixelsArray[i][0].getAttribute('isFree')=== 'false') {
             tetris.iamAlive = false
-            //clearInterval(tetris.intervalId)
         }
-    }
-
+        }
     },
     eraseTetromino(){
         document.querySelectorAll('.tetris--active').forEach(function(pixelDiv) {
@@ -262,11 +271,6 @@ const tetris = {
                     tetris.intervalId = setInterval(tetris.play.bind(tetris), tetris.delay)
                 }
                 tetris.moveTetromino(direction[1].toLowerCase())
-     /*            if(direction[1].toLowerCase() === 'up'){
-                    tetris.rotate(tetris.activeTetroPattern.slice())
-                } else {
-                    tetris.moveTetromino(direction[1].toLowerCase())
-                } */
             }
         }
     // Gestion des autres touches

@@ -4,11 +4,9 @@
     width: 10px;
   }
   
-  
   ::-webkit-scrollbar-track {
     background: #f1f1f1;
   }
-  
   
   ::-webkit-scrollbar-thumb {
     background: #888;
@@ -29,7 +27,6 @@ body {
     justify-content: space-between;
 }
 
-
 .topMenu {
     position:sticky;
     top: 0px;
@@ -41,7 +38,6 @@ body {
     position: sticky;
     bottom:0px;
 }
-
 
 .menu{
     display: flex;
@@ -162,19 +158,6 @@ body {
 
 }
 
-.pixel--tetris{
-    border: none;
-    background-color: #fbfaf5;
-
-}
-.tetris--active{
-    border: solid #858585 1px;
-}
-.tetris--freezed{
-    border: solid #858585 1px;
-}
-
-
 
 .pixel--snakeMode{
     border: none;
@@ -281,6 +264,17 @@ body {
     color: #547f69;
 }
 
+.pixel--tetris{
+    border: none;
+    background-color: #fbfaf5; 
+}
+.tetris--active{
+    border: solid #858585 1px;
+}
+.tetris--freezed{
+    border: solid #858585 1px;
+}
+
 .tetris-z {
     background-color: #FFADAD ;
 }
@@ -302,8 +296,6 @@ body {
 .tetris-o {
     background-color:#FFC6FF ;
 }
-
-
 
 .hide{
     display: none;
@@ -402,7 +394,6 @@ body {
   .animatedBtn:hover a {
     color: #2D3142;
   }
-
   /* ANIMATED BOUTON  FIN*/
 
 

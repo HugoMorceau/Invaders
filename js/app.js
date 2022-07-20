@@ -11,25 +11,18 @@ const app = {
     resetCount: 0,
     gameModeSelected: false,
     init(){
+        if(app.firsInit){
+            app.initModesMenu();
+            app.listenForm();
+            invaders.initColorPalette();
+        }
         // Si le mode n'a pas été init, on l'init
         if(this.gameModeSelected){
             this.gameModeSelected = false
         }else{
             app.setMode();
         }
-        
-        // DEBUG PURPOSE
-        console.log('**********************************************')
-        this.initCount++;
-        console.log('START INIT APP - COUNT : ' + this.initCount)
-        // DEBUG END
-        if(app.firsInit){
-            app.initModesMenu();
-            app.listenForm();
-            invaders.initColorPalette();
-        }
         app.reset();
-        // app.listenEvents();
         pixel.init();
         grid.init();
 
@@ -54,8 +47,6 @@ const app = {
         }
 
         app.firsInit = false;
-        console.log("Previous app mode = " + app.previousMode + " - Current = " + app.currentMode) //debug
-        console.log('Fin initialisation APP') // debug
     },
     reset(){
         // DEBUG PURPOSE
@@ -119,7 +110,6 @@ const app = {
         btn.textContent = ''
         btn.appendChild(divSlide)
         btn.appendChild(span)
-        console.log("animation du bouton : " + btn)
     },
 
     setMode(evt){
@@ -151,7 +141,6 @@ const app = {
                 grid.row = 22;
                 grid.col = 10;
                 pixel.pixelSize = '25px';   
-                pixel.pixelDrawColor = 'white'
                 break;
             default:
                 grid.row = grid.defaultSize;
