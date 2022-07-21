@@ -49,11 +49,10 @@ const app = {
         app.firsInit = false;
     },
     reset(){
-        // DEBUG PURPOSE
-        console.log('Reset du previous mode : ' + this.previousMode)
-        this.resetCount++;
-        console.log('START RESET APP - COUNT : ' + this.resetCount)
-        // DEBUG END
+        // A développer => Factorisation du reset global ici
+        // ....
+
+        // Resets spécifiques
         switch(this.previousMode){
             case 'invaders':
                 invaders.resetInvaders();
@@ -193,7 +192,11 @@ const app = {
 }
  app.init();
 
- let touchstartX = 0
+ let test = 1
+ test += 1
+ console.log(test)
+
+let touchstartX = 0
 let touchendX = 0
     
 function checkDirection() {

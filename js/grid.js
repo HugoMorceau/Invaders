@@ -1,5 +1,5 @@
 const grid = {
-    defaultSize: 35,
+    defaultSize: 10,
     row: 0,
     col: 0,
     size: 0,

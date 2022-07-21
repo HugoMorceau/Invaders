@@ -13,6 +13,9 @@ const tetris = {
     activeTetroRow : 0,
     paused: true,
     sprint: false,
+    level: 0,
+    completedLines: 0,
+    score: 0,
 
     // tetrominoes, tetrosColors => à factoriser...
     tetrominoes: {
@@ -38,7 +41,9 @@ const tetris = {
         clearInterval(tetris.intervalId)
         console.log('clr inter : ' + tetris.intervalId)
         tetris.resetRequired = true;
-
+        document.querySelector('.config').classList.add('hide');
+        document.getElementById('clearBtn').classList.add('hide');
+        document.getElementById("difficulty").classList.add('hide');    
         document.removeEventListener('keydown', tetris.handleKeyboard)
         document.removeEventListener('keyup', tetris.handleKeyboardReleased)
         app.resetEmojiWin();
@@ -154,10 +159,12 @@ const tetris = {
             let tempPattern = tetris.activeTetroPattern.slice()
             let isFree = this.isPositionFree(tempPattern,this.activeTetroCol,this.activeTetroRow + 1 )
             if(isFree ){
+                // La prochaine position est libre, le tétromino "tombe" d'une ligne
                 tetris.activeTetroRow ++
                 tetris.eraseTetromino()
                 tetris.drawTetromino(tetris.activeTetroPattern, tetris.activeTetroCol, tetris.activeTetroRow) 
             } else {
+                // La prochaine position n'est pas libre, le tétromino est figé à sa position actuelle
                 tetris.activeTetro = ''
                 tetris.activeTetroCol = 0
                 tetris.activeTetroRow = 0
@@ -211,6 +218,7 @@ const tetris = {
                 // clearInterval(tetris.intervalId)
             })
         } 
+        let completedRow = 0
         // check si une ligne est complète
         for(let row = 0; row < grid.row; row++){
             let rowIsComplete = true    
@@ -221,17 +229,49 @@ const tetris = {
                 }
             }
             if(rowIsComplete){
+                completedRow ++
                 let col = 0
                 document.querySelectorAll('.column').forEach(column => {
+                    // On supprime chaque pixel de la ligne
                     column.removeChild(column.children[row])
-                    let test = pixel.pixelsArray[col][0].cloneNode(true)
-                    column.prepend(test)
+                    // On ajoute une ligne vierge pixel par pixel
+                    let newRowPix = pixel.pixelsArray[col][0].cloneNode(true)
+                    column.prepend(newRowPix)
                     pixel.pixelsArray[col] = column.children
                     col ++
-                });
+                    console.log('lines completed : ' +tetris.completedLines)
+                });        
             }
-         
         }
+        tetris.completedLines += completedRow
+        // Level up si score atteint
+        if(tetris.completedLines >= (tetris.level + 1) * 5 ){
+            tetris.level ++
+            clearInterval(tetris.intervalId)
+            tetris.delay = tetris.delay * 0.9
+            tetris.intervalId = setInterval(tetris.play.bind(tetris), tetris.delay)
+            console.log('level up : ' + tetris.level)
+            console.log('delay : ' +tetris.delay)
+        }
+        // Si au moins une ligne complétée, on augmente le score
+        switch (completedRow) {
+            case 1:
+                tetris.score += (40 * (tetris.level + 1))
+                break;
+            case 2:
+                tetris.score += (100 * (tetris.level + 1))
+                break;
+            case 3:
+                tetris.score += (300 * (tetris.level + 1))
+                break;
+            case 4:
+                tetris.score += (1200 * (tetris.level + 1))
+                break;
+            default:
+                break;
+        }
+        console.log(tetris.score)
+        
         // check si un tetromino touche le haut de la grille
         for(let i = 0; i < grid.col; i++){
         if(pixel.pixelsArray[i][0].getAttribute('isFree')=== 'false') {

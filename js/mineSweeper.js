@@ -8,6 +8,7 @@ const mineSweeper = {
 
     resetMineSweeper(){
         document.getElementById("difficulty").classList.add('hide')
+        document.querySelector('.config').classList.add('hide');
         // formulaire spécifique
         document.getElementById("nbOfMines").classList.add('hide')
         app.resetEmojiWin();
@@ -36,7 +37,10 @@ const mineSweeper = {
         if(grid.row> 22 ) {
             grid.gridDiv.classList.add("overflowY")
         }else{grid.gridDiv.classList.remove("overflowY")}
-
+        if (mineSweeper.difficulty === 'customDiff'){
+            document.querySelector('.config').classList.remove('hide')
+            document.getElementById("nbOfMines").classList.remove('hide')
+        }
     },
     listenMinesweeper(){
         const selDiff = document.getElementById("difficulty-choice")
@@ -46,7 +50,9 @@ const mineSweeper = {
         mineSweeper.difficulty = evt.target.value
         
         mineSweeper.setDifficulty(mineSweeper.difficulty);
-        app.init();
+        if(mineSweeper.difficulty != 'customDiff'){
+            app.init();
+        }
  
     },
     setDifficulty(difficulty){
