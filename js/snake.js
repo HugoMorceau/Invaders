@@ -43,8 +43,6 @@ const snake = {
     },
 
     init(){
-        app.currentMode = 'snake'
-        console.log('Init Snake start') // debug
         this.direction = 'left' 
         this.iamAlive = true
         this.resetRequired = false;
@@ -68,7 +66,6 @@ const snake = {
             i++
         }
         this.drawRat();
-        console.log('Init Snake done') // debug
         // Lancement du jeu
         snake.intervalId = setInterval(snake.play, snake.delay)
     },
@@ -92,8 +89,6 @@ const snake = {
             snake.nextPositionType = this.whatIsThisPix(snake.nextPosition)
         } catch (error) {
             if (error instanceof TypeError){ // la prochaine position est hors des limites de la grille
-                console.log('error catched for Type Error in snake.setNextPosition()')
-                console.log('dans le mur')
                 pixIs = 'wall'
                 if(snake.mode === 'borderless'){
                     this.goThroughWall()
@@ -118,22 +113,18 @@ const snake = {
         snake.nextPositionType = this.whatIsThisPix(snake.nextPosition)
     },
     moveSnake(){  
-        console.log('Position tête : ' + this.posHead)
-        console.log('move snake ' + this.direction   )
         this.setNextPosition()
         if (this.nextPositionType === 'snake') {
                 // Le serpent ne peut pas reculer
                 if(this.snakeBody[1] === this.nextPosition){ 
-                    console.log('annule direction')
                     // on annule la dernière direction  
-                    console.log('last dir = ' + snake.lastDirection)             
                     snake.direction = snake.lastDirection
                     // on rapelle directement moveSnake pour court-circuiter le setIntervall
                     // et éviter d'avoir un double délai à cause du return
                     this.moveSnake(snake.direction)
                     return;
                 } else{
-                    console.log('dans le snake')
+                    // Le serpent se mord la queue et meurt
                     snake.iamAlive = false
                     this.iDied = true;
                     return;
@@ -147,7 +138,6 @@ const snake = {
                 this.goThroughWall()
             }
             else{
-                console.log('dans le mur')
                 snake.iamAlive = false
                 this.iDied = true
                 return;
@@ -170,8 +160,6 @@ const snake = {
   
     drawSnake(col,row){
         const pix = pixel.pixelsArray[col][row]
-        console.log('draw snake : ')
-        console.log( pix )
         pix.classList.remove(pixel.defaultPixelDrawColor,this.ratColor )
         // pix.classList.remove(this.ratColor)
         pix.classList.add(this.snakeColor, 'pixel--snake')

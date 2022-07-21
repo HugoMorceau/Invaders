@@ -6,6 +6,18 @@ const mineSweeper = {
     difficulty: '',
     resetCount: 0,
 
+    resetMineSweeper(){
+        document.getElementById("difficulty").classList.add('hide')
+        // formulaire spécifique
+        document.getElementById("nbOfMines").classList.add('hide')
+        app.resetEmojiWin();
+        document.querySelectorAll('.pixel').forEach(function(elt)
+        {                                                                   
+            elt.classList.remove('pixel--hide', 'lightgrey', 'pixel--flag', 'pixel--questionMark')
+        })
+        this.resetCount++ // debug
+        console.log('Reset MineSweeper done'+ this.resetCount)
+    },
     init(){
         this.revealed = 0;
         this.initDifficultySelect();
@@ -68,18 +80,7 @@ const mineSweeper = {
             console.log(document.getElementById('nbOfMines').value)
         } 
     },
-    resetMineSweeper(){
-       document.getElementById("difficulty").classList.add('hide')
-       document.getElementById("nbOfMines").classList.add('hide')
-       app.resetEmojiWin();
-       document.querySelectorAll('.pixel').forEach(function(elt)
-       {                                                                   
-           elt.classList.remove('pixel--hide', 'lightgrey', 'pixel--flag', 'pixel--questionMark')
-           // elt.classList.add('pixel--revealed')
-       })
-       this.resetCount++ // debug
-       console.log('Reset MineSweeper done'+ this.resetCount)
-    },
+
     initDifficultySelect(){
         const selDiff = document.getElementById("difficulty-choice").value
         this.difficulty = selDiff

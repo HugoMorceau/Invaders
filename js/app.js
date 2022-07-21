@@ -50,6 +50,7 @@ const app = {
     },
     reset(){
         // DEBUG PURPOSE
+        console.log('Reset du previous mode : ' + this.previousMode)
         this.resetCount++;
         console.log('START RESET APP - COUNT : ' + this.resetCount)
         // DEBUG END
@@ -191,3 +192,20 @@ const app = {
     },
 }
  app.init();
+
+ let touchstartX = 0
+let touchendX = 0
+    
+function checkDirection() {
+  if (touchendX < touchstartX) alert('swiped left!')
+  if (touchendX > touchstartX) alert('swiped right!')
+}
+
+document.addEventListener('touchstart', e => {
+  touchstartX = e.changedTouches[0].screenX
+})
+
+document.addEventListener('touchend', e => {
+  touchendX = e.changedTouches[0].screenX
+  checkDirection()
+})

@@ -32,7 +32,7 @@ const invaders = {
     },
     initColorPalette(){
         this.colorPalette = document.createElement('div')
-        this.colorPalette.classList.add('colorPalette')
+        this.colorPalette.classList.add('colorPalette', 'hide')
         app.bottomMenu.appendChild(this.colorPalette)
 
         this.colorList.forEach(color => {

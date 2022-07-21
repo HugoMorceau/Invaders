@@ -11,6 +11,8 @@ const tetris = {
     activeTetroPattern : '',
     activeTetroCol : 0,
     activeTetroRow : 0,
+    paused: true,
+    sprint: false,
 
     // tetrominoes, tetrosColors => à factoriser...
     tetrominoes: {
@@ -34,6 +36,7 @@ const tetris = {
 
     reset(){
         clearInterval(tetris.intervalId)
+        console.log('clr inter : ' + tetris.intervalId)
         tetris.resetRequired = true;
 
         document.removeEventListener('keydown', tetris.handleKeyboard)
@@ -52,15 +55,16 @@ const tetris = {
     },
 
     init(){
+        app.initEmojiWin();
         tetris.resetRequired = false;
         tetris.delay = tetris.defaultDelay
         this.activeTetro = ''
-        tetris.intervalId = setInterval(tetris.play.bind(this), tetris.delay)
         this.listenKeyboard()
     },
     play(){   
         if(!tetris.iamAlive || tetris.resetRequired){
             clearInterval(tetris.intervalId)
+            console.log('clr inter : ' + tetris.intervalId)
             if(!tetris.iamAlive){
                 alert('you lose')
                 return
@@ -247,14 +251,18 @@ const tetris = {
         document.addEventListener('keyup', tetris.handleKeyboardReleased)
     },
     handleKeyboardReleased(event){
-        if(event.code.substring(0,5)=== 'Arrow'){
+        if(event.code.substring(0,5)=== 'Arrow' && !tetris.paused){
             event.preventDefault()
             const direction = event.code.split('Arrow')
             if(direction[1].toLowerCase() === 'down'){
+                console.log('down released')
+                tetris.sprint = false
                 clearInterval(tetris.intervalId)
+                console.log('clr inter : ' + tetris.intervalId)
                 if(tetris.iamAlive){
                     tetris.delay = tetris.defaultDelay
                     tetris.intervalId = setInterval(tetris.play.bind(tetris), tetris.delay)
+                    console.log('set inter : ' + tetris.intervalId)
                 }
             }
         }
@@ -262,21 +270,44 @@ const tetris = {
     handleKeyboard(event){
         console.log(event.code)
         if(tetris.iamAlive){
-            if(event.code.substring(0,5)=== 'Arrow'){
+            if(event.code.substring(0,5)=== 'Arrow'  && !tetris.paused){
                 event.preventDefault()
                 const direction = event.code.split('Arrow')
                 if(direction[1].toLowerCase() === 'down'){
-                    clearInterval(tetris.intervalId)
-                    tetris.delay = tetris.sprintDelay
-                    tetris.intervalId = setInterval(tetris.play.bind(tetris), tetris.delay)
+                    // Si on est déjà en sprint, pas la peine de relancer l'interval
+                    if(!tetris.sprint){ 
+                        tetris.sprint = true
+                        console.log('down pressed')
+                        clearInterval(tetris.intervalId)
+                        console.log('clr inter : ' + tetris.intervalId)
+                        tetris.delay = tetris.sprintDelay
+                        tetris.intervalId = setInterval(tetris.play.bind(tetris), tetris.delay)
+                        console.log('set inter : ' + tetris.intervalId)
+                    }
                 }
                 tetris.moveTetromino(direction[1].toLowerCase())
             }
         }
     // Gestion des autres touches
     switch (event.code) {
+        case 'Escape':
         case 'Space':
+            console.log(event)
+            event.preventDefault()
             // Pause le jeu, a developper plus tard
+            if(tetris.paused){
+                tetris.paused = false
+                // Si le jeu est en pause, le relance
+                console.log('set inter : ' + tetris.intervalId)
+                tetris.intervalId = setInterval(tetris.play.bind(tetris), tetris.delay)
+                console.log('set inter : ' + tetris.intervalId)
+                console.log('game resumed')
+            }else{
+                tetris.paused = true
+                clearInterval(tetris.intervalId)
+                console.log('clr inter : ' + tetris.intervalId)
+                console.log('game paused')
+            }
             break;
         default: 
             break;

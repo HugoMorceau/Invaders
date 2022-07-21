@@ -266,10 +266,13 @@ body {
 
 .pixel--tetris{
     border: none;
-    background-color: #fbfaf5; 
+    background-color: #fbfaf5;
+    border: transparent #858585 1px;
+
 }
 .tetris--active{
     border: solid #858585 1px;
+   
 }
 .tetris--freezed{
     border: solid #858585 1px;
