@@ -300,7 +300,6 @@ const tetris = {
                 clearInterval(tetris.intervalId)
                 console.log('clr inter : ' + tetris.intervalId)
                 if(tetris.iamAlive){
-                    tetris.delay = tetris.defaultDelay
                     tetris.intervalId = setInterval(tetris.play.bind(tetris), tetris.delay)
                     console.log('set inter : ' + tetris.intervalId)
                 }
@@ -320,8 +319,7 @@ const tetris = {
                         console.log('down pressed')
                         clearInterval(tetris.intervalId)
                         console.log('clr inter : ' + tetris.intervalId)
-                        tetris.delay = tetris.sprintDelay
-                        tetris.intervalId = setInterval(tetris.play.bind(tetris), tetris.delay)
+                        tetris.intervalId = setInterval(tetris.play.bind(tetris), tetris.sprintDelay)
                         console.log('set inter : ' + tetris.intervalId)
                     }
                 }

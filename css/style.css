@@ -63,7 +63,9 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: #BCAC9F;
+    /*background-color: #BCAC9F;*/
+    /*background-color: lightgrey;*/
+    background-color: #fbfaf5;
     
 }  
 .grid--border{
@@ -265,17 +267,21 @@ body {
 }
 
 .pixel--tetris{
-    border: none;
+   border: none;
+    border-radius: 2PX;
     background-color: #fbfaf5;
-    border: transparent #858585 1px;
+   /* margin-top: 1px;
+    margin-right: 1px;*/
+    border: 1px #fbfaf5 solid;
 
 }
 .tetris--active{
-    border: solid #858585 1px;
    
+    border: 1px #fbfaf5 solid;
+    border: solid #85858595 1px;
 }
 .tetris--freezed{
-    border: solid #858585 1px;
+   /* border: solid #858585 1px;*/
 }
 
 .tetris-z {
