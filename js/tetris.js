@@ -77,7 +77,7 @@ const tetris = {
         }
         // Si pas de tétromino actif, on en génère un nouveau aléatoire
         if(this.activeTetro === ''){
-            do{ // génère un tetromino au hasard
+            do{ 
                 this.activeTetro = this.generateTetromino()  
             } while(tetris.activeTetro === tetris.previousTetro) // on ne veut pas 2 fois de suite le même tetromino
             tetris.previousTetro = tetris.activeTetro
@@ -87,12 +87,12 @@ const tetris = {
             // Dessine le nouveau tétromino sur la première ligne (0) et au centre (largeur de grille /2 - largeur tetro /2)
             this.drawTetromino(this.activeTetroPattern, Math.floor(grid.col/2 - this.activeTetroPattern.length / 2),0)
         } else{
+            // Si tétromino actif, il tombe
             this.moveTetromino('down') 
         }
-   
     },
-    // Vérifie si un dessin (pattern) peut être tracé à la position indiqué (colDraw, rowDraw)
-    // Si une seule zone de l'espace nécessaire au dessin est occupé par un autre tétromino ou hors de la grille, renvoi false,
+    // Vérifie si un dessin (pattern) peut être tracé à la position indiquée (colDraw, rowDraw)
+    // Si une seule zone de l'espace nécessaire au dessin est occupée par un autre tétromino ou hors de la grille, renvoi false,
     // Renvoi true si le dessin peut être réalisé
     isPositionFree(pattern, colDraw, rowDraw){
         // for (let col = 0; col < 4; col++) {
