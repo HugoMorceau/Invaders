@@ -10,8 +10,8 @@ const mainController = {
       console.log('render de l index par le main controller')
       // test logs ip
       console.log('logs ip debut ')
-      let ip = req.headers['x-forwarded-for'] ||req.socket.remoteAddress ||null;
-      console.log(ip)       
+      console.log(req.headers['x-forwarded-for'] )
+      console.log(req.socket.remoteAddress)
       console.log('logs ip fin ')
       res.render('index');
     }
