@@ -9,7 +9,7 @@ const client = new Client({
     port: process.env.DB_PORT,
     host: 'localhost',
 }) 
-  client.connect(); 
+client.connect(); 
 
-  // module.exports = { pool };
-  module.exports =  client ;
+// module.exports = { pool };
+module.exports =  client ;
