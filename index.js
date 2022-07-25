@@ -8,6 +8,7 @@ const app = express();
 // Define public assets
 const publicFolderPath = path.join(__dirname, "./app/public");
 app.use(express.static(publicFolderPath));
+console.log(publicFolderPath);
 
 // Set view engine
 app.set("view engine", "ejs");
