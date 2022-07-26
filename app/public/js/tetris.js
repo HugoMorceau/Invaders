@@ -245,12 +245,12 @@ const tetris = {
         }
         tetris.completedLines += completedRow
         // Level up si score atteint
-        if(tetris.completedLines >= (tetris.level + 1) * 5 ){
+        if(tetris.completedLines >= (tetris.level + 1) * 7 ){
             tetris.level ++
             clearInterval(tetris.intervalId)
-            tetris.delay = tetris.delay * 0.9
+            tetris.delay = Math.floor(tetris.delay * 0.91)
             tetris.intervalId = setInterval(tetris.play.bind(tetris), tetris.delay)
-            console.log('level up : ' + tetris.level)
+            alert('level up : ' + tetris.level)
             console.log('delay : ' +tetris.delay)
         }
         // Si au moins une ligne complétée, on augmente le score

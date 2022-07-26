@@ -3,12 +3,12 @@ const mainController = require("./controllers/mainController");
 
 const router = new Router();
 
-// Pas forcément un controller, car très simple
-/* router.get('/', (_req, res)=>{
-    console.log('render de l index')
-    res.render('index');
-  }); */
-
 router.get('/', mainController.homePage);
+
+router.get('/test', (req,res)=> {
+  req.session.admino = 'test'
+  console.log(req.session.admino)
+  res.render('index');
+});
 
 module.exports = router;

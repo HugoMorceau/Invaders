@@ -1,5 +1,3 @@
-
-require('dotenv').config();
 const { Client } = require("pg");
 
 const client = new Client({
@@ -11,5 +9,4 @@ const client = new Client({
 }) 
 client.connect(); 
 
-// module.exports = { pool };
 module.exports =  client ;

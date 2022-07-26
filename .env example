@@ -4,5 +4,7 @@ DB_PASSWORD=dbpass
 DB_PORT=5432
 DB_HOST= 'localhost'
 
+SESSION_SECRET='secret_string'
+
 
 

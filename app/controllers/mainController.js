@@ -1,19 +1,26 @@
 // const client = require('../database/client');
 // const { pool } = require("../database/db");
-const client = require("../database/db");
+const client = require("../database/client");
 
 const mainController = {
     homePage(req, res){
-      // test logs ip
-      console.log(req.headers['x-forwarded-for'] ) // récupère l'ip
-      console.log(client)
       // Test requete sql
       client.query("SELECT * FROM shark")
         .then(result => {
+
+            // test SQL
             console.log('resultat sql => ');
             console.log(result.rows);
+            // cookies
+            console.log(req.session.admino);
+            if(req.session.admino === 'test'){
+              console.log('req.session.admino valorise "test" ');  
+            }else {
+              req.session.admino = 'index'
+              console.log(req.session.admino);
+            }
             // Rendu de la page d'accueil
-            console.log('render de l index par le main controller')
+            console.log('render de l index par le main controller');
             res.render('index');
         })
         .catch(error => {
