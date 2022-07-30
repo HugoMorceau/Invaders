@@ -1,10 +1,11 @@
 /*DROP TABLE IF EXISTS "scores";*/
+/*psql -U hugo -d invaders -f chemin/du/fichier.sql */
 
 CREATE TABLE IF NOT EXISTS "scores" (
   "id" INT NOT NULL PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-  "game" VARCHAR(128),
+  "game" VARCHAR(20),
   "score" INT,
-  "pseudo" VARCHAR(50),
+  "pseudo" VARCHAR(30)
 );
 
 /* CREATE TABLE IF NOT EXISTS "student" (

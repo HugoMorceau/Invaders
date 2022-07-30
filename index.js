@@ -31,7 +31,10 @@ app.use(expressSession({
     secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: true,
-    cookie: { secure: false, maxAge: 1000 * 60 * 60 * 24 * 365 },
+    cookie: {
+      secure: false,
+      maxAge: 1000 * 60 * 60 * 24 * 365 
+    },
   }));
   
 // Add router
