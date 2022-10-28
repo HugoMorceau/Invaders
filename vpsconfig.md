@@ -1,3 +1,7 @@
+** Reset ssh key **
+```
+ssh-keygen -R adresse-ip-du-serveur
+```
 **Maj du système**
 ```
 apt-get update 
