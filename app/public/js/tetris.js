@@ -43,7 +43,9 @@ const tetris = {
         tetris.resetRequired = true;
         document.querySelector('.config').classList.add('hide');
         document.getElementById('clearBtn').classList.add('hide');
-        document.getElementById("difficulty").classList.add('hide');    
+        document.getElementById("difficulty").classList.add('hide');   
+        document.getElementById("startBtn").classList.add('hide') 
+        document.getElementById("pauseBtn").classList.add('hide') 
         document.removeEventListener('keydown', tetris.handleKeyboard)
         document.removeEventListener('keyup', tetris.handleKeyboardReleased)
         app.resetEmojiWin();
@@ -63,6 +65,8 @@ const tetris = {
         app.initEmojiWin();
         tetris.resetRequired = false;
         tetris.delay = tetris.defaultDelay
+        document.getElementById("startBtn").classList.remove('hide') 
+        document.getElementById("pauseBtn").classList.remove('hide') 
         this.activeTetro = ''
         this.listenKeyboard()
     },

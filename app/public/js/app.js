@@ -192,10 +192,6 @@ const app = {
 }
  app.init();
 
- let test = 1
- test += 1
- console.log(test)
-
 let touchstartX = 0
 let touchendX = 0
     
