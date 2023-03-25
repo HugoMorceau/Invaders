@@ -3,7 +3,7 @@ DB_DATABASE='database_name'
 DB_PASSWORD=dbpass
 DB_PORT=5432
 DB_HOST= 'localhost'
-
+PORT=3200
 SESSION_SECRET='secret_string'
 
 
