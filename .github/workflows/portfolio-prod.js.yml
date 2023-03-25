@@ -1,0 +1,24 @@
+name: mini-games-prod-full
+
+on:
+  push: 
+    branches: [ main ]
+
+jobs:
+  build: 
+    runs-on: [self-hosted, linux, x64, prod, full]
+  
+    steps:
+    - uses: actions/checkout@v3
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v3
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+    - run: |
+        npm i
+    - name: PM2 restart
+      run: |
+        pm2 stop mini-games-prod-full
+        pm2 start mini-games-prod-full
+        pm2 save --force
