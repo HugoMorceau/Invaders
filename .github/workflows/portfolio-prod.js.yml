@@ -17,6 +17,7 @@ jobs:
         cache: 'npm'
     - run: |
         npm i
+        cp /home/runner_user/.env_backups/mini-games.env_backups/.env .env
     - name: PM2 restart
       run: |
         pm2 stop mini-games-prod-full
