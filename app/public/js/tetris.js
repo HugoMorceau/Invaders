@@ -68,7 +68,7 @@ const tetris = {
         document.getElementById("startBtn").classList.remove('hide') 
         document.getElementById("pauseBtn").classList.remove('hide') 
         this.activeTetro = ''
-        this.listenKeyboard()
+        this.listen()
     },
     play(){   
         if(!tetris.iamAlive || tetris.resetRequired){
@@ -290,9 +290,12 @@ const tetris = {
     },
 
     // EVENTS LISTENERS / HANDLERS
-    listenKeyboard(){
+    listen(){
         document.addEventListener('keydown', tetris.handleKeyboard)
         document.addEventListener('keyup', tetris.handleKeyboardReleased)
+        // document.getElementById('pauseBtn').addEventListener('click', tetris.gameState)
+        document.getElementById('pauseBtn').addEventListener('click', () => tetris.gameState('pause'))
+        document.getElementById('startBtn').addEventListener('click', () => tetris.gameState('start'))
     },
     handleKeyboardReleased(event){
         if(event.code.substring(0,5)=== 'Arrow' && !tetris.paused){
@@ -308,6 +311,23 @@ const tetris = {
                     console.log('set inter : ' + tetris.intervalId)
                 }
             }
+        }
+    },
+    gameState(state){
+        console.log('game state : ' + tetris.paused)
+        if(state==='start' && tetris.paused){
+            tetris.paused = false
+            // Si le jeu est en pause, le relance
+            console.log('set inter : ' + tetris.intervalId)
+            tetris.intervalId = setInterval(tetris.play.bind(tetris), tetris.delay)
+            console.log('set inter : ' + tetris.intervalId)
+            console.log('game resumed')
+        }
+        if(state==='pause' && !tetris.paused){
+            tetris.paused = true
+            clearInterval(tetris.intervalId)
+            console.log('clr inter : ' + tetris.intervalId)
+            console.log('game paused')
         }
     },
     handleKeyboard(event){
@@ -330,6 +350,7 @@ const tetris = {
                 tetris.moveTetromino(direction[1].toLowerCase())
             }
         }
+
     // Gestion des autres touches
     switch (event.code) {
         case 'Escape':
