@@ -25,6 +25,8 @@ body {
     background-color: #5357CA;
     font-family:  Helvetica, sans-serif;
     justify-content: space-between;
+    overflow-x: hidden;
+    overflow-y: hidden;
 }
 
 .menu{
