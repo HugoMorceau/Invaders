@@ -39,6 +39,8 @@ const snake = {
         })
         clearInterval(snake.intervalId)
         document.removeEventListener('keydown', snake.handleKeyboard)
+        document.removeEventListener('touchstart', snake.handleTouchStart, false);
+        document.removeEventListener('touchmove', snake.handleTouchMove, false);
         console.log('Reset Snake done') // debug
     },
 
@@ -216,6 +218,59 @@ const snake = {
     // EVENTS LISTENERS / HANDLERS
     listenKeyboard(){
         document.addEventListener('keydown', snake.handleKeyboard)
+        // swipe
+        document.addEventListener('touchstart', snake.handleTouchStart, false);
+        document.addEventListener('touchmove', snake.handleTouchMove, false);
+    },
+    handleTouchStart(event) {
+        // Enregistre la position de départ du swipe
+        snake.touchStartX = event.touches[0].clientX;
+        snake.touchStartY = event.touches[0].clientY;
+        
+    },
+    handleTouchMove(event) {
+        if (event.touches.length > 1) {
+            // Ignore les gestes multi-touch
+            return;
+        }
+
+        // Limitations
+        const now = Date.now();
+        if (now - snake.lastMoveTime < 200) {
+            // Limite la fréquence des mouvements à 5 par seconde
+            return;
+        }
+        snake.lastMoveTime = now;
+
+        const touchEndX = event.touches[0].clientX;
+        const touchEndY = event.touches[0].clientY;
+    
+        const deltaX = touchEndX - snake.touchStartX;
+        const deltaY = touchEndY - snake.touchStartY;
+        snake.arrowKeyPressed = true
+        // Détermine la direction du swipe en fonction du mouvement le plus important
+        if (Math.abs(deltaX) > Math.abs(deltaY)) {
+            
+            if (deltaX > 0) {
+                // Swipe à droite
+                snake.direction = 'right';
+                
+            } else {
+                // Swipe à gauche
+                snake.direction = 'left';
+                
+            }
+        } else {
+            if (deltaY > 0) {
+                // Swipe vers le bas
+                snake.direction = 'down';
+                
+            }else {
+                // swipe up
+                snake.direction = 'up';
+                
+              }
+        }
     },
     handleKeyboard(event){
         console.log(event.code)

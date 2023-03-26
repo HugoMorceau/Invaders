@@ -2,8 +2,8 @@
 /* eslint-disable no-constant-condition */
 const app = {
     firsInit: true,
-    availablesModes: ['invaders', 'mineSweeper', 'snake', '2048', 'tetris'],
-    currentMode: 'tetris',
+    availablesModes: ['invaders', 'mines', 'snake', 'even', 'blocks'],
+    currentMode: 'blocks',
     previousMode: '',
     bottomMenu: document.querySelector('.bottomMenu'),
     topMenu: document.querySelector('.topMenu'),
@@ -27,8 +27,8 @@ const app = {
         grid.init();
 
         switch(this.currentMode){
-            case 'mineSweeper':
-                mineSweeper.init();
+            case 'mines':
+                mines.init();
                 break;
             case  'invaders':
                 invaders.init();
@@ -36,11 +36,11 @@ const app = {
             case  'snake':
                 snake.init();
                 break;
-            case  '2048':
-                g2048.init();
+            case  'even':
+                geven.init();
                 break;
-            case 'tetris':
-                tetris.init();
+            case 'blocks':
+                blocks.init();
                 break;
             default:
                 invaders.init();
@@ -57,24 +57,24 @@ const app = {
             case 'invaders':
                 invaders.resetInvaders();
                 break;
-            case 'mineSweeper':
-                mineSweeper.resetMineSweeper();
+            case 'mines':
+                mines.resetmines();
                 break;
             case 'snake':
                 snake.reset();
                 break;
-            case  '2048':
-                g2048.reset();
+            case  'even':
+                geven.reset();
                 break;
-            case  'tetris':
-                tetris.reset();
+            case  'blocks':
+                blocks.reset();
                 break;
             default: 
                 invaders.resetInvaders();
-                mineSweeper.resetMineSweeper(); 
+                mines.resetmines(); 
                 snake.reset();
-                g2048.reset();
-                tetris.reset();
+                geven.reset();
+                blocks.reset();
                 console.log('Previous mode undefined => reset par defaut')
         }
     },
@@ -127,17 +127,17 @@ const app = {
                 grid.col = 30;
                 pixel.pixelSize = '10px';
                 break;
-            case  'mineSweeper':
-                pixel.pixelSize = '25px'; 
-                mineSweeper.difficulty = document.getElementById("difficulty-choice").value
-                mineSweeper.setDifficulty(mineSweeper.difficulty);
+            case  'mines':
+                pixel.pixelSize = '40px'; 
+                mines.difficulty = document.getElementById("difficulty-choice").value
+                mines.setDifficulty(mines.difficulty);
                 break;
-            case  '2048':
+            case  'even':
                 grid.row = 4;
                 grid.col = 4;
                 pixel.pixelSize = '60px';   
                 break;
-            case  'tetris':
+            case  'blocks':
                 grid.row = 22;
                 grid.col = 10;
                 pixel.pixelSize = '25px';   
@@ -162,6 +162,14 @@ const app = {
         // btn valid tailles pixels et grille
         const configBtn = document.getElementById('configBtn');
         configBtn.addEventListener('click', app.configClick);
+
+        // menu btn
+        const menuBtn = document.getElementById('menuBurger');
+        const navTop = document.getElementById('navTop');
+        menuBtn.addEventListener('click', function() {
+        navTop.classList.toggle('show');
+        });
+
     },
     // Clique sur Validation tailles pixels et grille
     configClick(event) {
@@ -171,8 +179,8 @@ const app = {
         const gridColsInput = document.getElementById('gridCols').value
         const gridRowsInput = document.getElementById('gridRows').value
      
-        if(app.currentMode === "mineSweeper" && mineSweeper.difficulty === 'customDiff'){
-            mineSweeper.nbOfMines = document.getElementById('nbOfMines').value
+        if(app.currentMode === "mines" && mines.difficulty === 'customDiff'){
+            mines.nbOfMines = document.getElementById('nbOfMines').value
         }
 
         if (pixelSizeInput !== '' && pixelSizeInput > 0) {
@@ -192,14 +200,10 @@ const app = {
 }
  app.init();
 
- let test = 1
- test += 1
- console.log(test)
-
 let touchstartX = 0
 let touchendX = 0
     
-function checkDirection() {
+/*function checkDirection() {
   if (touchendX < touchstartX) alert('swiped left!')
   if (touchendX > touchstartX) alert('swiped right!')
 }
@@ -212,3 +216,4 @@ document.addEventListener('touchend', e => {
   touchendX = e.changedTouches[0].screenX
   checkDirection()
 })
+*/
