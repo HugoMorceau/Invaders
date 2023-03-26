@@ -266,41 +266,41 @@ body {
     color: #547f69;
 }
 
-.pixel--tetris{
+.pixel--blocks{
     border: none;
     border-radius: 2PX;
     background-color: #fbfaf5;
     border: 1px #fbfaf5 solid;
 
 }
-.tetris--active{
+.blocks--active{
    
     border: solid #85858595 1px;
 }
-.tetris--freezed{
+.blocks--freezed{
     /* border: 1px #fbfaf5 solid;*/
     border: solid #85858595 1px;
 }
 
-.tetris-z {
+.blocks-z {
     background-color: #FFADAD ;
 }
-.tetris-s {
+.blocks-s {
     background-color: #bdb2ff
 }
-.tetris-l {
+.blocks-l {
     background-color: #FDFFB6 ;
 }
-.tetris-j {
+.blocks-j {
     background-color: #CAFFBF ;
 }
-.tetris-i {
+.blocks-i {
     background-color: #9BF6FF;
 }
-.tetris-t {
+.blocks-t {
     background-color:#A0C4FF ;
 }
-.tetris-o {
+.blocks-o {
     background-color:#FFC6FF ;
 }
 

@@ -2,8 +2,8 @@
 /* eslint-disable no-constant-condition */
 const app = {
     firsInit: true,
-    availablesModes: ['invaders', 'mineSweeper', 'snake', '2048', 'tetris'],
-    currentMode: 'tetris',
+    availablesModes: ['invaders', 'mineSweeper', 'snake', '2048', 'blocks'],
+    currentMode: 'blocks',
     previousMode: '',
     bottomMenu: document.querySelector('.bottomMenu'),
     topMenu: document.querySelector('.topMenu'),
@@ -39,8 +39,8 @@ const app = {
             case  '2048':
                 g2048.init();
                 break;
-            case 'tetris':
-                tetris.init();
+            case 'blocks':
+                blocks.init();
                 break;
             default:
                 invaders.init();
@@ -66,15 +66,15 @@ const app = {
             case  '2048':
                 g2048.reset();
                 break;
-            case  'tetris':
-                tetris.reset();
+            case  'blocks':
+                blocks.reset();
                 break;
             default: 
                 invaders.resetInvaders();
                 mineSweeper.resetMineSweeper(); 
                 snake.reset();
                 g2048.reset();
-                tetris.reset();
+                blocks.reset();
                 console.log('Previous mode undefined => reset par defaut')
         }
     },
@@ -137,7 +137,7 @@ const app = {
                 grid.col = 4;
                 pixel.pixelSize = '60px';   
                 break;
-            case  'tetris':
+            case  'blocks':
                 grid.row = 22;
                 grid.col = 10;
                 pixel.pixelSize = '25px';   

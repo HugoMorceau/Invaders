@@ -1,5 +1,5 @@
 
-const tetris = {
+const blocks = {
     intervalId:0,
     iamAlive: true,
     resetRequired: false,
@@ -28,33 +28,33 @@ const tetris = {
         tetroO: [[1,1],[1,1]],
     },
     tetrosColors:{
-        tetroZ: 'tetris-z',
-        tetroS: 'tetris-s',
-        tetroL: 'tetris-l',
-        tetroJ: 'tetris-j',
-        tetroI: 'tetris-i',
-        tetroT: 'tetris-t',
-        tetroO: 'tetris-o',
+        tetroZ: 'blocks-z',
+        tetroS: 'blocks-s',
+        tetroL: 'blocks-l',
+        tetroJ: 'blocks-j',
+        tetroI: 'blocks-i',
+        tetroT: 'blocks-t',
+        tetroO: 'blocks-o',
     },
 
     reset(){
-        clearInterval(tetris.intervalId)
-        console.log('clr inter : ' + tetris.intervalId)
-        tetris.resetRequired = true;
+        clearInterval(blocks.intervalId)
+        console.log('clr inter : ' + blocks.intervalId)
+        blocks.resetRequired = true;
         document.querySelector('.config').classList.add('hide');
         document.getElementById('clearBtn').classList.add('hide');
         document.getElementById("difficulty").classList.add('hide');   
         document.getElementById("startBtn").classList.add('hide') 
         document.getElementById("pauseBtn").classList.add('hide') 
-        document.removeEventListener('keydown', tetris.handleKeyboard)
-        document.removeEventListener('keyup', tetris.handleKeyboardReleased)
+        document.removeEventListener('keydown', blocks.handleKeyboard)
+        document.removeEventListener('keyup', blocks.handleKeyboardReleased)
         app.resetEmojiWin();
         pixel.pixelDrawColor = pixel.defaultPixelDrawColor;
         document.querySelectorAll('.pixel').forEach(function(elt)
         {         
             for (let i = elt.classList.length - 1; i >= 0; i--) {
                 const className = elt.classList[i];
-                if (className.includes('tetris')) {
+                if (className.includes('blocks')) {
                     elt.classList.remove(className);
                 }
             }                                                           
@@ -63,18 +63,18 @@ const tetris = {
 
     init(){
         app.initEmojiWin();
-        tetris.resetRequired = false;
-        tetris.delay = tetris.defaultDelay
+        blocks.resetRequired = false;
+        blocks.delay = blocks.defaultDelay
         document.getElementById("startBtn").classList.remove('hide') 
         document.getElementById("pauseBtn").classList.remove('hide') 
         this.activeTetro = ''
         this.listen()
     },
     play(){   
-        if(!tetris.iamAlive || tetris.resetRequired){
-            clearInterval(tetris.intervalId)
-            console.log('clr inter : ' + tetris.intervalId)
-            if(!tetris.iamAlive){
+        if(!blocks.iamAlive || blocks.resetRequired){
+            clearInterval(blocks.intervalId)
+            console.log('clr inter : ' + blocks.intervalId)
+            if(!blocks.iamAlive){
                 alert('you lose')
                 return
             }
@@ -83,8 +83,8 @@ const tetris = {
         if(this.activeTetro === ''){
             do{ 
                 this.activeTetro = this.generateTetromino()  
-            } while(tetris.activeTetro === tetris.previousTetro) // on ne veut pas 2 fois de suite le même tetromino
-            tetris.previousTetro = tetris.activeTetro
+            } while(blocks.activeTetro === blocks.previousTetro) // on ne veut pas 2 fois de suite le même tetromino
+            blocks.previousTetro = blocks.activeTetro
             // Récupère les infos (dessin et couleurs) du tétromino
             this.activeTetroPattern = this.tetrominoes[this.activeTetro]
             this.activeColor = this.tetrosColors[this.activeTetro]
@@ -124,13 +124,13 @@ const tetris = {
         return true;
     },
     drawTetromino(pattern, colDraw, rowDraw){
-        tetris.activeTetroCol = colDraw
-        tetris.activeTetroRow = rowDraw
+        blocks.activeTetroCol = colDraw
+        blocks.activeTetroRow = rowDraw
             for (let col = 0; col < 4; col++) {
                 for (let row=0; row < 5; row++) {
                     try {
                         if(pattern[col][row]){
-                            pixel.pixelsArray[colDraw + col][rowDraw +row].classList.add('tetris--active', tetris.activeColor)
+                            pixel.pixelsArray[colDraw + col][rowDraw +row].classList.add('blocks--active', blocks.activeColor)
                         }    
                     } catch (error) {   
                     }
@@ -139,46 +139,46 @@ const tetris = {
     },
     moveTetromino(direction){
         if(direction === 'up'){
-            tetris.rotate(tetris.activeTetroPattern.slice())
+            blocks.rotate(blocks.activeTetroPattern.slice())
          }     
          if(direction === 'left'){
-            let tempPattern = tetris.activeTetroPattern.slice()
+            let tempPattern = blocks.activeTetroPattern.slice()
             let isFree = this.isPositionFree(tempPattern,this.activeTetroCol -1, this.activeTetroRow)
             if(isFree){
-                tetris.activeTetroCol --
-                tetris.eraseTetromino()
-                tetris.drawTetromino(tetris.activeTetroPattern,this.activeTetroCol, this.activeTetroRow)
+                blocks.activeTetroCol --
+                blocks.eraseTetromino()
+                blocks.drawTetromino(blocks.activeTetroPattern,this.activeTetroCol, this.activeTetroRow)
             }
          }
          if(direction === 'right'){
-            let tempPattern = tetris.activeTetroPattern.slice()
+            let tempPattern = blocks.activeTetroPattern.slice()
             let isFree = this.isPositionFree(tempPattern,this.activeTetroCol +1, this.activeTetroRow)
             if(isFree){
-                tetris.activeTetroCol ++
-                tetris.eraseTetromino()
-                tetris.drawTetromino(tetris.activeTetroPattern,this.activeTetroCol, this.activeTetroRow)
+                blocks.activeTetroCol ++
+                blocks.eraseTetromino()
+                blocks.drawTetromino(blocks.activeTetroPattern,this.activeTetroCol, this.activeTetroRow)
             }
          }
          if(direction === 'down'){
-            let tempPattern = tetris.activeTetroPattern.slice()
+            let tempPattern = blocks.activeTetroPattern.slice()
             let isFree = this.isPositionFree(tempPattern,this.activeTetroCol,this.activeTetroRow + 1 )
             if(isFree ){
                 // La prochaine position est libre, le tétromino "tombe" d'une ligne
-                tetris.activeTetroRow ++
-                tetris.eraseTetromino()
-                tetris.drawTetromino(tetris.activeTetroPattern, tetris.activeTetroCol, tetris.activeTetroRow) 
+                blocks.activeTetroRow ++
+                blocks.eraseTetromino()
+                blocks.drawTetromino(blocks.activeTetroPattern, blocks.activeTetroCol, blocks.activeTetroRow) 
             } else {
                 // La prochaine position n'est pas libre, le tétromino est figé à sa position actuelle
-                tetris.activeTetro = ''
-                tetris.activeTetroCol = 0
-                tetris.activeTetroRow = 0
-                tetris.activeTetroPattern = ''
-                tetris.freezeTetromino()
+                blocks.activeTetro = ''
+                blocks.activeTetroCol = 0
+                blocks.activeTetroRow = 0
+                blocks.activeTetroPattern = ''
+                blocks.freezeTetromino()
             }
          }
     },
     generateTetromino(){
-        randNB = grid.randomNum(Object.keys(tetris.tetrominoes).length)
+        randNB = grid.randomNum(Object.keys(blocks.tetrominoes).length)
         let i = 0
         for (const tetromino in this.tetrominoes) {
             if(i===randNB){
@@ -197,29 +197,29 @@ const tetris = {
                 console.log('rotation impossible, hors limite grille')
             } else {
                 // Redraw new position
-                if(tetris.activeTetro === 'tetroI') {
-                    if(typeof tetris.activeTetroPattern[0][1] === 'undefined'){
-                        tetris.activeTetroCol ++
+                if(blocks.activeTetro === 'tetroI') {
+                    if(typeof blocks.activeTetroPattern[0][1] === 'undefined'){
+                        blocks.activeTetroCol ++
                     } else {
-                        tetris.activeTetroCol --
+                        blocks.activeTetroCol --
                     }
                 }
-                tetris.eraseTetromino()
-                tetris.activeTetroPattern = tetromino
-                tetris.drawTetromino(tetris.activeTetroPattern, tetris.activeTetroCol, tetris.activeTetroRow)  
+                blocks.eraseTetromino()
+                blocks.activeTetroPattern = tetromino
+                blocks.drawTetromino(blocks.activeTetroPattern, blocks.activeTetroCol, blocks.activeTetroRow)  
             }
         }
     },
 
     freezeTetromino(){
  
-        if(tetris.iamAlive){
-            document.querySelectorAll('.tetris--active').forEach(function(pixelDiv) {
-                // pixelDiv.classList.remove(tetris.activeColor, 'tetris--active')
-                pixelDiv.classList.remove( 'tetris--active')
-                pixelDiv.classList.add('tetris--freezed')
+        if(blocks.iamAlive){
+            document.querySelectorAll('.blocks--active').forEach(function(pixelDiv) {
+                // pixelDiv.classList.remove(blocks.activeColor, 'blocks--active')
+                pixelDiv.classList.remove( 'blocks--active')
+                pixelDiv.classList.add('blocks--freezed')
                 pixelDiv.setAttribute('isFree', 'false')
-                // clearInterval(tetris.intervalId)
+                // clearInterval(blocks.intervalId)
             })
         } 
         let completedRow = 0
@@ -243,111 +243,111 @@ const tetris = {
                     column.prepend(newRowPix)
                     pixel.pixelsArray[col] = column.children
                     col ++
-                    console.log('lines completed : ' +tetris.completedLines)
+                    console.log('lines completed : ' +blocks.completedLines)
                 });        
             }
         }
-        tetris.completedLines += completedRow
+        blocks.completedLines += completedRow
         // Level up si score atteint
-        if(tetris.completedLines >= (tetris.level + 1) * 7 ){
-            tetris.level ++
-            clearInterval(tetris.intervalId)
-            tetris.delay = Math.floor(tetris.delay * 0.91)
-            tetris.intervalId = setInterval(tetris.play.bind(tetris), tetris.delay)
-            alert('level up : ' + tetris.level)
-            console.log('delay : ' +tetris.delay)
+        if(blocks.completedLines >= (blocks.level + 1) * 7 ){
+            blocks.level ++
+            clearInterval(blocks.intervalId)
+            blocks.delay = Math.floor(blocks.delay * 0.91)
+            blocks.intervalId = setInterval(blocks.play.bind(blocks), blocks.delay)
+            alert('level up : ' + blocks.level)
+            console.log('delay : ' +blocks.delay)
         }
         // Si au moins une ligne complétée, on augmente le score
         switch (completedRow) {
             case 1:
-                tetris.score += (40 * (tetris.level + 1))
+                blocks.score += (40 * (blocks.level + 1))
                 break;
             case 2:
-                tetris.score += (100 * (tetris.level + 1))
+                blocks.score += (100 * (blocks.level + 1))
                 break;
             case 3:
-                tetris.score += (300 * (tetris.level + 1))
+                blocks.score += (300 * (blocks.level + 1))
                 break;
             case 4:
-                tetris.score += (1200 * (tetris.level + 1))
+                blocks.score += (1200 * (blocks.level + 1))
                 break;
             default:
                 break;
         }
-        console.log(tetris.score)
+        console.log(blocks.score)
         
         // check si un tetromino touche le haut de la grille
         for(let i = 0; i < grid.col; i++){
         if(pixel.pixelsArray[i][0].getAttribute('isFree')=== 'false') {
-            tetris.iamAlive = false
+            blocks.iamAlive = false
         }
         }
     },
     eraseTetromino(){
-        document.querySelectorAll('.tetris--active').forEach(function(pixelDiv) {
-            pixelDiv.classList.remove(tetris.activeColor, 'tetris--active')
+        document.querySelectorAll('.blocks--active').forEach(function(pixelDiv) {
+            pixelDiv.classList.remove(blocks.activeColor, 'blocks--active')
         })
     },
 
     // EVENTS LISTENERS / HANDLERS
     listen(){
-        document.addEventListener('keydown', tetris.handleKeyboard)
-        document.addEventListener('keyup', tetris.handleKeyboardReleased)
-        // document.getElementById('pauseBtn').addEventListener('click', tetris.gameState)
-        document.getElementById('pauseBtn').addEventListener('click', () => tetris.gameState('pause'))
-        document.getElementById('startBtn').addEventListener('click', () => tetris.gameState('start'))
+        document.addEventListener('keydown', blocks.handleKeyboard)
+        document.addEventListener('keyup', blocks.handleKeyboardReleased)
+        // document.getElementById('pauseBtn').addEventListener('click', blocks.gameState)
+        document.getElementById('pauseBtn').addEventListener('click', () => blocks.gameState('pause'))
+        document.getElementById('startBtn').addEventListener('click', () => blocks.gameState('start'))
     },
     handleKeyboardReleased(event){
-        if(event.code.substring(0,5)=== 'Arrow' && !tetris.paused){
+        if(event.code.substring(0,5)=== 'Arrow' && !blocks.paused){
             event.preventDefault()
             const direction = event.code.split('Arrow')
             if(direction[1].toLowerCase() === 'down'){
                 console.log('down released')
-                tetris.sprint = false
-                clearInterval(tetris.intervalId)
-                console.log('clr inter : ' + tetris.intervalId)
-                if(tetris.iamAlive){
-                    tetris.intervalId = setInterval(tetris.play.bind(tetris), tetris.delay)
-                    console.log('set inter : ' + tetris.intervalId)
+                blocks.sprint = false
+                clearInterval(blocks.intervalId)
+                console.log('clr inter : ' + blocks.intervalId)
+                if(blocks.iamAlive){
+                    blocks.intervalId = setInterval(blocks.play.bind(blocks), blocks.delay)
+                    console.log('set inter : ' + blocks.intervalId)
                 }
             }
         }
     },
     gameState(state){
-        console.log('game state : ' + tetris.paused)
-        if(state==='start' && tetris.paused){
-            tetris.paused = false
+        console.log('game state : ' + blocks.paused)
+        if(state==='start' && blocks.paused){
+            blocks.paused = false
             // Si le jeu est en pause, le relance
-            console.log('set inter : ' + tetris.intervalId)
-            tetris.intervalId = setInterval(tetris.play.bind(tetris), tetris.delay)
-            console.log('set inter : ' + tetris.intervalId)
+            console.log('set inter : ' + blocks.intervalId)
+            blocks.intervalId = setInterval(blocks.play.bind(blocks), blocks.delay)
+            console.log('set inter : ' + blocks.intervalId)
             console.log('game resumed')
         }
-        if(state==='pause' && !tetris.paused){
-            tetris.paused = true
-            clearInterval(tetris.intervalId)
-            console.log('clr inter : ' + tetris.intervalId)
+        if(state==='pause' && !blocks.paused){
+            blocks.paused = true
+            clearInterval(blocks.intervalId)
+            console.log('clr inter : ' + blocks.intervalId)
             console.log('game paused')
         }
     },
     handleKeyboard(event){
         console.log(event.code)
-        if(tetris.iamAlive){
-            if(event.code.substring(0,5)=== 'Arrow'  && !tetris.paused){
+        if(blocks.iamAlive){
+            if(event.code.substring(0,5)=== 'Arrow'  && !blocks.paused){
                 event.preventDefault()
                 const direction = event.code.split('Arrow')
                 if(direction[1].toLowerCase() === 'down'){
                     // Si on est déjà en sprint, pas la peine de relancer l'interval
-                    if(!tetris.sprint){ 
-                        tetris.sprint = true
+                    if(!blocks.sprint){ 
+                        blocks.sprint = true
                         console.log('down pressed')
-                        clearInterval(tetris.intervalId)
-                        console.log('clr inter : ' + tetris.intervalId)
-                        tetris.intervalId = setInterval(tetris.play.bind(tetris), tetris.sprintDelay)
-                        console.log('set inter : ' + tetris.intervalId)
+                        clearInterval(blocks.intervalId)
+                        console.log('clr inter : ' + blocks.intervalId)
+                        blocks.intervalId = setInterval(blocks.play.bind(blocks), blocks.sprintDelay)
+                        console.log('set inter : ' + blocks.intervalId)
                     }
                 }
-                tetris.moveTetromino(direction[1].toLowerCase())
+                blocks.moveTetromino(direction[1].toLowerCase())
             }
         }
 
@@ -358,17 +358,17 @@ const tetris = {
             console.log(event)
             event.preventDefault()
             // Pause le jeu, a developper plus tard
-            if(tetris.paused){
-                tetris.paused = false
+            if(blocks.paused){
+                blocks.paused = false
                 // Si le jeu est en pause, le relance
-                console.log('set inter : ' + tetris.intervalId)
-                tetris.intervalId = setInterval(tetris.play.bind(tetris), tetris.delay)
-                console.log('set inter : ' + tetris.intervalId)
+                console.log('set inter : ' + blocks.intervalId)
+                blocks.intervalId = setInterval(blocks.play.bind(blocks), blocks.delay)
+                console.log('set inter : ' + blocks.intervalId)
                 console.log('game resumed')
             }else{
-                tetris.paused = true
-                clearInterval(tetris.intervalId)
-                console.log('clr inter : ' + tetris.intervalId)
+                blocks.paused = true
+                clearInterval(blocks.intervalId)
+                console.log('clr inter : ' + blocks.intervalId)
                 console.log('game paused')
             }
             break;
