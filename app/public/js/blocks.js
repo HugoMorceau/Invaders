@@ -16,6 +16,8 @@ const blocks = {
     level: 0,
     completedLines: 0,
     score: 0,
+    lastMoveTime: 0,
+    lastRotateTime: 0,
 
     // tetrominoes, tetrosColors => à factoriser...
     tetrominoes: {
@@ -48,6 +50,9 @@ const blocks = {
         document.getElementById("pauseBtn").classList.add('hide') 
         document.removeEventListener('keydown', blocks.handleKeyboard)
         document.removeEventListener('keyup', blocks.handleKeyboardReleased)
+        document.removeEventListener('touchstart', blocks.handleTouchStart, false);
+        document.removeEventListener('touchmove', blocks.handleTouchMove, false);
+
         app.resetEmojiWin();
         pixel.pixelDrawColor = pixel.defaultPixelDrawColor;
         document.querySelectorAll('.pixel').forEach(function(elt)
@@ -296,6 +301,57 @@ const blocks = {
         // document.getElementById('pauseBtn').addEventListener('click', blocks.gameState)
         document.getElementById('pauseBtn').addEventListener('click', () => blocks.gameState('pause'))
         document.getElementById('startBtn').addEventListener('click', () => blocks.gameState('start'))
+
+        // swipe
+        document.addEventListener('touchstart', blocks.handleTouchStart, false);
+        document.addEventListener('touchmove', blocks.handleTouchMove, false);
+    },
+    handleTouchStart(event) {
+        // Enregistre la position de départ du swipe
+        blocks.touchStartX = event.touches[0].clientX;
+        blocks.touchStartY = event.touches[0].clientY;
+    },
+    handleTouchMove(event) {
+        if (event.touches.length > 1) {
+            // Ignore les gestes multi-touch
+            return;
+        }
+         // Limitations
+         const now = Date.now();
+         if (now - blocks.lastMoveTime < 30) {
+             // Limite la fréquence des mouvements à 5 par seconde
+             return;
+         }
+         blocks.lastMoveTime = now;         
+
+        const touchEndX = event.touches[0].clientX;
+        const touchEndY = event.touches[0].clientY;
+    
+        const deltaX = touchEndX - blocks.touchStartX;
+        const deltaY = touchEndY - blocks.touchStartY;
+    
+        // Détermine la direction du swipe en fonction du mouvement le plus important
+        if (Math.abs(deltaX) > Math.abs(deltaY)) {
+            if (deltaX > 0) {
+                // Swipe à droite
+                blocks.moveTetromino('right');
+            } else {
+                // Swipe à gauche
+                blocks.moveTetromino('left');
+            }
+        } else {
+            if (deltaY > 0) {
+                // Swipe vers le bas
+                blocks.moveTetromino('down');
+            }else {
+                // swipe up
+                if(now - blocks.lastRotateTime < 100 ){
+                    return;
+                }
+                blocks.lastRotateTime = now;
+                blocks.rotate(blocks.activeTetroPattern.slice())
+              }
+        }
     },
     handleKeyboardReleased(event){
         if(event.code.substring(0,5)=== 'Arrow' && !blocks.paused){

@@ -3,10 +3,13 @@ const geven = {
     arrowKeyPressed: false,
     stateChanged: true,
     direction: '',
+    lastMoveTime: 0,
     reset() {
         document.removeEventListener('keydown', geven.handleKeyboard)
         app.resetEmojiWin();
         pixel.pixelDrawColor = pixel.defaultPixelDrawColor;
+        document.removeEventListener('touchstart', geven.handleTouchStart, false);
+        document.removeEventListener('touchmove', geven.handleTouchMove, false);
         document.querySelectorAll('.pixel--even').forEach(function(elt)
         {         
             for (let i = elt.classList.length - 1; i >= 0; i--) {
@@ -191,6 +194,60 @@ const geven = {
     // EVENTS LISTENERS / HANDLERS
     listenKeyboard() {
         document.addEventListener('keydown', geven.handleKeyboard)
+        // swipe
+        document.addEventListener('touchstart', geven.handleTouchStart, false);
+        document.addEventListener('touchmove', geven.handleTouchMove, false);
+        
+    },
+    handleTouchStart(event) {
+        // Enregistre la position de départ du swipe
+        geven.touchStartX = event.touches[0].clientX;
+        geven.touchStartY = event.touches[0].clientY;
+        
+    },
+    handleTouchMove(event) {
+        if (event.touches.length > 1) {
+            // Ignore les gestes multi-touch
+            return;
+        }
+
+        // Limitations
+        const now = Date.now();
+        if (now - geven.lastMoveTime < 200) {
+            // Limite la fréquence des mouvements à 5 par seconde
+            return;
+        }
+        geven.lastMoveTime = now;
+
+        const touchEndX = event.touches[0].clientX;
+        const touchEndY = event.touches[0].clientY;
+    
+        const deltaX = touchEndX - geven.touchStartX;
+        const deltaY = touchEndY - geven.touchStartY;
+        geven.arrowKeyPressed = true
+        // Détermine la direction du swipe en fonction du mouvement le plus important
+        if (Math.abs(deltaX) > Math.abs(deltaY)) {
+            
+            if (deltaX > 0) {
+                // Swipe à droite
+                geven.direction = 'right';
+                geven.play()
+            } else {
+                // Swipe à gauche
+                geven.direction = 'left';
+                geven.play()
+            }
+        } else {
+            if (deltaY > 0) {
+                // Swipe vers le bas
+                geven.direction = 'down';
+                geven.play()
+            }else {
+                // swipe up
+                geven.direction = 'up';
+                geven.play()
+              }
+        }
     },
     handleKeyboard(event) {
         if (event.code.substring(0, 5) === 'Arrow') {

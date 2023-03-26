@@ -128,7 +128,7 @@ const app = {
                 pixel.pixelSize = '10px';
                 break;
             case  'mines':
-                pixel.pixelSize = '25px'; 
+                pixel.pixelSize = '40px'; 
                 mines.difficulty = document.getElementById("difficulty-choice").value
                 mines.setDifficulty(mines.difficulty);
                 break;
@@ -162,6 +162,14 @@ const app = {
         // btn valid tailles pixels et grille
         const configBtn = document.getElementById('configBtn');
         configBtn.addEventListener('click', app.configClick);
+
+        // menu btn
+        const menuBtn = document.getElementById('menuBurger');
+        const navTop = document.getElementById('navTop');
+        menuBtn.addEventListener('click', function() {
+        navTop.classList.toggle('show');
+        });
+
     },
     // Clique sur Validation tailles pixels et grille
     configClick(event) {
@@ -195,7 +203,7 @@ const app = {
 let touchstartX = 0
 let touchendX = 0
     
-function checkDirection() {
+/*function checkDirection() {
   if (touchendX < touchstartX) alert('swiped left!')
   if (touchendX > touchstartX) alert('swiped right!')
 }
@@ -208,3 +216,4 @@ document.addEventListener('touchend', e => {
   touchendX = e.changedTouches[0].screenX
   checkDirection()
 })
+*/
