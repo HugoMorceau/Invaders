@@ -15,6 +15,7 @@ const app = {
             app.initModesMenu();
             app.listenForm();
             invaders.initColorPalette();
+            
         }
         // Si le mode n'a pas été init, on l'init
         if(this.gameModeSelected){
