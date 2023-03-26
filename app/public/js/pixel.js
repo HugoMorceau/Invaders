@@ -38,8 +38,8 @@ const pixel = {
         if(app.currentMode === 'snake'){
            pixelDiv.classList.add('pixel--snakeMode') 
         }
-        if(app.currentMode === '2048'){
-            pixelDiv.classList.add('pixel--2048') 
+        if(app.currentMode === 'even'){
+            pixelDiv.classList.add('pixel--even') 
          }
          if(app.currentMode === 'blocks'){
             pixelDiv.classList.add('pixel--blocks') 

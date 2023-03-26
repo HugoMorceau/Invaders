@@ -63,7 +63,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    /* background-color: #BCAC9F;  => 2048 */
+    /* background-color: #BCAC9F;  => even */
     /* background-color: lightgrey;*/
      background-color: #fbfaf5 
     
@@ -308,8 +308,8 @@ body {
     display: none;
 }
 
-/* 2048 */
-.pixel--2048{
+/* even */
+.pixel--even{
     background-color:#CCC1B4;
     font-size: 1.5rem;
     font-weight: bold;
@@ -319,10 +319,10 @@ body {
     border-radius: 5%;
 }
 
-.pixel--2048-dark{
+.pixel--even-dark{
     color: #776e65;    
 }
-.pixel--2048-light{
+.pixel--even-light{
     color: #f9f6f2;
 }
 .pixel--transition{
@@ -332,41 +332,41 @@ body {
     transform: scale(0.8);
 } */
   
-.pixel--2048-2{
+.pixel--even-2{
     background-color: #eee4da;
 }
-.pixel--2048-4{
+.pixel--even-4{
     background-color: #ede0c8;
 }
-.pixel--2048-8{
+.pixel--even-8{
     background-color: #f2b179;
 }
-.pixel--2048-16{
+.pixel--even-16{
     background-color: #f59563;
 }
-.pixel--2048-32{
+.pixel--even-32{
     background-color:#f67c5f;
 }
-.pixel--2048-64{
+.pixel--even-64{
     background-color: #f65e3b
 }
-.pixel--2048-128{
+.pixel--even-128{
     background-color:#edcf72;
 }
-.pixel--2048-256{
+.pixel--even-256{
     background-color: #edcc61;
 }
 
-.pixel--2048-512{
+.pixel--even-512{
     background-color:#edc850;
 }
-.pixel--2048-1024{
+.pixel--even-1024{
     background-color:#edc53f;
 }
-.pixel--2048-2048{
+.pixel--even-even{
     background-color: #edc22e;
 }
-/* 2048 end */
+/* even end */
 
 /* ANIMATED BOUTON */
 .animatedBtn {

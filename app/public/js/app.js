@@ -2,7 +2,7 @@
 /* eslint-disable no-constant-condition */
 const app = {
     firsInit: true,
-    availablesModes: ['invaders', 'mines', 'snake', '2048', 'blocks'],
+    availablesModes: ['invaders', 'mines', 'snake', 'even', 'blocks'],
     currentMode: 'blocks',
     previousMode: '',
     bottomMenu: document.querySelector('.bottomMenu'),
@@ -36,8 +36,8 @@ const app = {
             case  'snake':
                 snake.init();
                 break;
-            case  '2048':
-                g2048.init();
+            case  'even':
+                geven.init();
                 break;
             case 'blocks':
                 blocks.init();
@@ -63,8 +63,8 @@ const app = {
             case 'snake':
                 snake.reset();
                 break;
-            case  '2048':
-                g2048.reset();
+            case  'even':
+                geven.reset();
                 break;
             case  'blocks':
                 blocks.reset();
@@ -73,7 +73,7 @@ const app = {
                 invaders.resetInvaders();
                 mines.resetmines(); 
                 snake.reset();
-                g2048.reset();
+                geven.reset();
                 blocks.reset();
                 console.log('Previous mode undefined => reset par defaut')
         }
@@ -132,7 +132,7 @@ const app = {
                 mines.difficulty = document.getElementById("difficulty-choice").value
                 mines.setDifficulty(mines.difficulty);
                 break;
-            case  '2048':
+            case  'even':
                 grid.row = 4;
                 grid.col = 4;
                 pixel.pixelSize = '60px';   
