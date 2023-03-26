@@ -1,7 +1,7 @@
 {
   "name": "hugomorceau.github.io",
   "version": "1.0.0",
-  "description": "> Ajouter une nouvelle valeur dans le tableau de app.js availablesModes: ['invaders', 'mineSweeper', 'snake' ....] va automatiquement créer un nouveau bouton du mode de jeu\r ## 1 - Pixel Draw\r Hello there\r ## 2 - MineSweeper\r Général Kenobi !\r ## 3 - Realease the Snake",
+  "description": "> Ajouter une nouvelle valeur dans le tableau de app.js availablesModes: ['invaders', 'mines', 'snake' ....] va automatiquement créer un nouveau bouton du mode de jeu\r ## 1 - Pixel Draw\r Hello there\r ## 2 - mines\r Général Kenobi !\r ## 3 - Realease the Snake",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"

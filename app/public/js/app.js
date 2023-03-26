@@ -2,7 +2,7 @@
 /* eslint-disable no-constant-condition */
 const app = {
     firsInit: true,
-    availablesModes: ['invaders', 'mineSweeper', 'snake', '2048', 'blocks'],
+    availablesModes: ['invaders', 'mines', 'snake', '2048', 'blocks'],
     currentMode: 'blocks',
     previousMode: '',
     bottomMenu: document.querySelector('.bottomMenu'),
@@ -27,8 +27,8 @@ const app = {
         grid.init();
 
         switch(this.currentMode){
-            case 'mineSweeper':
-                mineSweeper.init();
+            case 'mines':
+                mines.init();
                 break;
             case  'invaders':
                 invaders.init();
@@ -57,8 +57,8 @@ const app = {
             case 'invaders':
                 invaders.resetInvaders();
                 break;
-            case 'mineSweeper':
-                mineSweeper.resetMineSweeper();
+            case 'mines':
+                mines.resetmines();
                 break;
             case 'snake':
                 snake.reset();
@@ -71,7 +71,7 @@ const app = {
                 break;
             default: 
                 invaders.resetInvaders();
-                mineSweeper.resetMineSweeper(); 
+                mines.resetmines(); 
                 snake.reset();
                 g2048.reset();
                 blocks.reset();
@@ -127,10 +127,10 @@ const app = {
                 grid.col = 30;
                 pixel.pixelSize = '10px';
                 break;
-            case  'mineSweeper':
+            case  'mines':
                 pixel.pixelSize = '25px'; 
-                mineSweeper.difficulty = document.getElementById("difficulty-choice").value
-                mineSweeper.setDifficulty(mineSweeper.difficulty);
+                mines.difficulty = document.getElementById("difficulty-choice").value
+                mines.setDifficulty(mines.difficulty);
                 break;
             case  '2048':
                 grid.row = 4;
@@ -171,8 +171,8 @@ const app = {
         const gridColsInput = document.getElementById('gridCols').value
         const gridRowsInput = document.getElementById('gridRows').value
      
-        if(app.currentMode === "mineSweeper" && mineSweeper.difficulty === 'customDiff'){
-            mineSweeper.nbOfMines = document.getElementById('nbOfMines').value
+        if(app.currentMode === "mines" && mines.difficulty === 'customDiff'){
+            mines.nbOfMines = document.getElementById('nbOfMines').value
         }
 
         if (pixelSizeInput !== '' && pixelSizeInput > 0) {

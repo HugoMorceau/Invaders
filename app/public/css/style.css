@@ -169,7 +169,7 @@ body {
     
 }
 
-.pixel--mineSweeper{
+.pixel--mines{
     border: 2px outset #ececec;
     box-sizing: border-box;
 }

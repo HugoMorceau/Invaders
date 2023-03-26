@@ -29,10 +29,10 @@ const pixel = {
         if (app.currentMode === 'invaders') {
             pixelDiv.addEventListener('click', pixel.handlePixelClick)
         }
-        if (app.currentMode === 'mineSweeper') {
+        if (app.currentMode === 'mines') {
             pixelDiv.addEventListener('click', pixel.handlePixelClickMS)
             pixelDiv.addEventListener('contextmenu', pixel.handlePixelRightClickMS)
-            pixelDiv.classList.add('pixel--mineSweeper')
+            pixelDiv.classList.add('pixel--mines')
             pixelDiv.style.fontSize = this.pixelSize
         }
         if(app.currentMode === 'snake'){
@@ -68,7 +68,7 @@ const pixel = {
         if(event.target.classList.contains('pixel--flag')||event.target.classList.contains('pixel--questionMark' )){
             // Si Flag ou ? , ne rien faire au clique gauche
         }else{
-        mineSweeper.setRevealStyle(event.target)
+        mines.setRevealStyle(event.target)
         if (event.target.textContent == '*') {
             console.log("YOU LOSE :(")
             document.getElementById('grid').style.pointerEvents = 'none' ;
@@ -81,11 +81,11 @@ const pixel = {
             document.getElementById("emojiWin").classList.add('angry')
         }
         if (event.target.textContent == '') {
-            const indexIJ = mineSweeper.getPixelIndex(event)
-            mineSweeper.initCheckArray();
-            mineSweeper.revealAround(indexIJ);
+            const indexIJ = mines.getPixelIndex(event)
+            mines.initCheckArray();
+            mines.revealAround(indexIJ);
         }
-        if(mineSweeper.revealed == grid.size - mineSweeper.nbOfMines ){
+        if(mines.revealed == grid.size - mines.nbOfMines ){
             console.log("YOU WIN !!!!")
             document.getElementById('grid').style.pointerEvents = 'none' ;
             document.getElementById("emojiWin").classList.add('happy')
