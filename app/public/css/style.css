@@ -18,7 +18,7 @@
   } 
 
 body {
-     height: 100vh;
+     height: 90vh;
     width: 99vw;
     display: flex;
     flex-direction: column;
@@ -35,7 +35,6 @@ body {
     }
 }
 .educ{
-   align-self: center;
    margin-bottom: 10px;
 }
 .menu{
@@ -82,7 +81,7 @@ body {
     display: none;
   }
   .mobileDisclaimer {
-    align-self: center;
+    
   }
   @media screen and (min-width: 768px) {
     .mobileDisclaimer {
@@ -146,7 +145,8 @@ body {
     justify-content: center;
     /* background-color: #BCAC9F;  => even */
     /* background-color: lightgrey;*/
-     background-color: #fbfaf5 
+     background-color: #fbfaf5 ;
+    margin-bottom: 35px;
     
 }  
 .grid--border{
