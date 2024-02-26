@@ -5,12 +5,12 @@ const mainController = {
     homePage(req, res){
       try{
         
-        if(req.session.admino === 'test'){
-          console.log('req.session.admino valorise "test" ');  
-        }else {
-          req.session.admino = 'index'
-          console.log(req.session.admino);
-        }
+        // if(req.session.admino === 'test'){
+        //   console.log('req.session.admino valorise "test" ');  
+        // }else {
+        //   req.session.admino = 'index'
+        //   console.log(req.session.admino);
+        // }
         // Rendu de la page d'accueil
         console.log('render de l index par le main controller');
         res.render('index');

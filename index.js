@@ -27,15 +27,15 @@ app.use(express.urlencoded({extended: true}));
 
 // let’s you use the cookieParser in your application
 // app.use(cookieParser(process.env.SESSION_SECRET));
-app.use(expressSession({
-    secret: process.env.SESSION_SECRET,
-    resave: false,
-    saveUninitialized: true,
-    cookie: {
-      secure: false,
-      maxAge: 1000 * 60 * 60 * 24 * 365 
-    },
-  }));
+// app.use(expressSession({
+//     secret: process.env.SESSION_SECRET,
+//     resave: false,
+//     saveUninitialized: true,
+//     cookie: {
+//       secure: false,
+//       maxAge: 1000 * 60 * 60 * 24 * 365 
+//     },
+//   }));
   
 // Add router
 app.use(router);
