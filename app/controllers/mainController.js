@@ -1,13 +1,10 @@
-// const client = require('../database/client');
-// const { pool } = require("../database/db");
-const client = require("../database/client");
+
+// const client = require("../database/client");
 
 const mainController = {
     homePage(req, res){
       try{
-        // cookies
-        console.log(req)
-        console.log('req.session.admino = ' + req.session.admino);
+        
         if(req.session.admino === 'test'){
           console.log('req.session.admino valorise "test" ');  
         }else {
